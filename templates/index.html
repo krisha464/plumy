@@ -1,0 +1,1133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lingua — Translation Platform</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --paper: #EDE8DC;
+      --card: #FAF8F3;
+      --ink: #1C1B19;
+      --ink-soft: #55524A;
+      --rule: #D8D1C0;
+      --cobalt: #2E4374;
+      --cobalt-soft: #E4E9F2;
+      --rust: #B4472C;
+      --brand-1: #2E4374;
+      --brand-2: #6A8AC6;
+      --brand-3: #F5C56B;
+      --brand-4: #E67E62;
+    }
+
+    body.dark {
+      --paper: #12181d;
+      --card: #1c252d;
+      --ink: #edf3f8;
+      --ink-soft: #b5c0cb;
+      --rule: #2d3943;
+      --cobalt: #8ab4ff;
+      --cobalt-soft: #1d2a3a;
+      --rust: #ff9a78;
+    }
+
+    * { box-sizing: border-box; margin:0; padding:0; }
+    body {
+      background:
+        radial-gradient(circle at top left, rgba(106,138,198,0.12), transparent 32%),
+        radial-gradient(circle at bottom right, rgba(230,126,98,0.10), transparent 28%),
+        var(--paper);
+      color: var(--ink);
+      font-family:'IBM Plex Sans', sans-serif;
+      line-height:1.5;
+    }
+    .wrap { max-width: 1180px; margin:0 auto; padding:0 28px; }
+    a { color:inherit; }
+
+    nav {
+      display:flex; align-items:center; justify-content:space-between;
+      padding:28px 0; border-bottom:1px solid var(--rule);
+    }
+    .brand-wrap {
+      display:flex; align-items:center; gap:12px;
+    }
+    .brand-mark {
+      width:38px; height:38px; border-radius:12px;
+      background:linear-gradient(135deg, var(--brand-1), var(--brand-2));
+      color:#fff; display:flex; align-items:center; justify-content:center;
+      font-family:'Source Serif 4', serif; font-size:1.2rem; font-weight:700;
+      box-shadow:0 12px 24px rgba(46,67,116,0.18);
+    }
+    .brand-text {
+      font-family:'Source Serif 4', serif; font-size:22px; font-weight:600;
+      display:flex; align-items:center; gap:10px;
+    }
+    .brand-badge {
+      padding:4px 8px; border-radius:999px; background:#f9edd4; color:#8a5a1d;
+      font-family:'IBM Plex Sans', sans-serif; font-size:10px; letter-spacing:0.08em;
+      text-transform:uppercase; font-weight:700;
+    }
+    .navlinks { display:flex; gap:32px; font-size:14px; }
+    .navlinks a { text-decoration:none; color:var(--ink-soft); }
+    .navcta {
+      font-size:14px; padding:9px 18px; background:var(--ink); color:var(--paper);
+      border-radius:3px; text-decoration:none;
+      margin-left:16px;
+    }
+    .hero-badges {
+      display:flex; flex-wrap:wrap; gap:10px; margin-top:18px;
+    }
+    .mini-badge {
+      display:inline-flex; align-items:center; gap:8px;
+      padding:8px 12px; border:1px solid var(--rule); border-radius:999px;
+      background:var(--card); color:var(--ink-soft); font-size:12px; font-weight:600;
+      box-shadow:0 6px 16px rgba(46,67,116,0.08);
+    }
+    .theme-toggle {
+      font-size:14px; padding:9px 16px; background:transparent; color:var(--ink);
+      border:1px solid var(--rule); border-radius:3px; cursor:pointer;
+    }
+
+    .hero {
+      padding:64px 0 40px;
+      display:grid;
+      grid-template-columns: minmax(0, 1.08fr) minmax(0, 1.42fr);
+      align-items:center;
+      column-gap:52px;
+      row-gap:24px;
+    }
+    .hero-copy {
+      order:2;
+      max-width:640px;
+      justify-self:end;
+    }
+    .hero-visual {
+      order:1;
+      display:flex; justify-content:flex-start;
+      margin-top:0;
+    }
+    .visual-surface {
+      position:relative; width:min(100%, 720px); min-height:390px;
+      background:linear-gradient(135deg, rgba(255,255,255,0.28), rgba(255,255,255,0.08));
+      border:1px solid rgba(216,209,192,0.95); border-radius:32px; overflow:hidden;
+      box-shadow:0 28px 60px rgba(46,67,116,0.08), inset 0 1px 0 rgba(255,255,255,0.35);
+    }
+    .visual-surface::before, .visual-surface::after {
+      content:""; position:absolute; border-radius:50%; filter:blur(18px);
+      opacity:0.55;
+    }
+    .visual-surface::before {
+      width:180px; height:180px; background:rgba(106,138,198,0.22); top:-36px; left:-18px;
+    }
+    .visual-surface::after {
+      width:220px; height:220px; background:rgba(245,197,107,0.20); bottom:-50px; right:-20px;
+    }
+    .floating-card {
+      position:absolute; display:flex; align-items:center; gap:10px; border-radius:18px;
+      background:rgba(255,255,255,0.76); backdrop-filter: blur(6px);
+      border:1px solid rgba(255,255,255,0.75); box-shadow:0 20px 38px rgba(0,0,0,0.08);
+      padding:18px 20px; font-size:15px; font-weight:600; color:var(--ink);
+      animation: floatCard 5s ease-in-out infinite;
+    }
+    .card-1 { top:38px; left:58px; }
+    .card-2 { top:112px; right:62px; animation-delay:1s; }
+    .card-3 { bottom:58px; left:138px; animation-delay:2s; }
+    .card-4 { bottom:82px; right:156px; animation-delay:3s; }
+    .floating-card span {
+      display:inline-flex; align-items:center; justify-content:center; width:32px; height:32px;
+      border-radius:10px; background:linear-gradient(135deg, var(--brand-2), var(--brand-3));
+      color:#fff; font-size:15px;
+    }
+    @keyframes floatCard {
+      0%, 100% { transform:translateY(0px); }
+      50% { transform:translateY(-8px); }
+    }
+    .kicker {
+      font-family:'IBM Plex Mono', monospace; font-size:12px; color:var(--cobalt);
+      letter-spacing:0.02em;
+    }
+    h1{
+      font-family:'Source Serif 4', serif; font-weight:600;
+      font-size:clamp(42px, 5vw, 82px); line-height:0.98; max-width:11.5ch; margin-top:10px;
+    }
+    .sub {
+      font-size:17px; color:var(--ink-soft); max-width:46ch; margin-top:16px;
+    }
+
+    .panel {
+      margin-top:40px; background:var(--card); border:1px solid var(--rule);
+      border-radius:6px; padding:32px; position:relative;
+    }
+    .panel-label {
+      font-family:'IBM Plex Mono', monospace; font-size:11px; color:var(--ink-soft);
+      display:flex; justify-content:space-between; margin-bottom:18px;
+    }
+
+    .demo-grid { display:grid; grid-template-columns:1fr; gap:0; }
+    @media(min-width:720px){ .demo-grid{grid-template-columns:1fr 44px 1fr;} }
+
+    textarea {
+      width:100%; border:none; background:transparent; resize:none;
+      font-family:'Source Serif 4', serif; font-size:22px; line-height:1.4;
+      color:var(--ink); outline:none; min-height:110px;
+    }
+    textarea::placeholder { color:#a39d8c; }
+    .output-text {
+      font-family:'Source Serif 4', serif; font-size:22px; line-height:1.4; min-height:110px;
+    }
+    .phonetic { font-family:'IBM Plex Mono', monospace; font-size:12.5px; color:var(--cobalt); margin-top:10px; }
+
+    .arrow-col {
+      display:flex; align-items:flex-start; justify-content:center; padding-top:14px;
+    }
+    .arrow-col svg { width:22px; height:22px; color:var(--rust); }
+
+    .demo-controls {
+      display:flex; align-items:center; gap:12px; margin-top:22px;
+      padding-top:20px; border-top:1px dashed var(--rule); flex-wrap:wrap;
+    }
+
+    select, button {
+      font-family:'IBM Plex Sans', sans-serif; font-size:13.5px;
+      border-radius:3px;
+    }
+    select {
+      padding:8px 12px; border:1px solid var(--rule); background:var(--paper); color:var(--ink);
+    }
+    button {
+      background:var(--cobalt); color:#fff; border:none; padding:9px 20px; font-weight:500; cursor:pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+    }
+    button:hover {
+      transform: translateY(-1px);
+      box-shadow:0 10px 18px rgba(46,67,116,0.16);
+    }
+    button.is-loading {
+      position:relative; padding-left:38px; opacity:0.92;
+    }
+    button.is-loading::before {
+      content:""; position:absolute; left:14px; top:50%; width:12px; height:12px;
+      margin-top:-6px; border-radius:50%; border:2px solid rgba(255,255,255,0.7);
+      border-top-color: transparent; animation:spin 0.7s linear infinite;
+    }
+    @keyframes spin { to { transform:rotate(360deg); } }
+    .phrase-hint { font-size:12.5px; color:var(--ink-soft); margin-left:auto; }
+
+    section { padding:56px 0; border-top:1px solid var(--rule); }
+    .section-head { display:flex; justify-content:space-between; align-items:flex-end; gap:20px; margin-bottom:36px; flex-wrap:wrap; }
+    h2 { font-family:'Source Serif 4', serif; font-weight:500; font-size:28px; }
+    .section-note { font-size:13.5px; color:var(--ink-soft); max-width:32ch; }
+
+    .tabs {
+      display:flex; flex-wrap:wrap; gap:12px; margin-bottom:24px;
+    }
+    .tab {
+      padding:10px 18px; border:1px solid var(--rule); border-radius:999px;
+      background:transparent; color:var(--ink-soft); cursor:pointer;
+    }
+    .tab.active {
+      background:var(--cobalt); color:var(--paper); border-color:var(--cobalt);
+    }
+
+    .feature-grid {
+      display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:20px;
+    }
+    .feature-card {
+      background:var(--card); border:1px solid var(--rule); border-radius:6px; padding:24px;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .feature-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 16px 28px rgba(46,67,116,0.08);
+    }
+    .feature-card h3 {
+      font-size:18px; font-family:'Source Serif 4', serif; margin-bottom:10px;
+      display:flex; align-items:center; gap:8px;
+    }
+    .feature-card .emoji {
+      font-size:1.15em;
+    }
+    .feature-card p { color:var(--ink-soft); }
+
+    .file-drop {
+      border:1px dashed var(--rule); border-radius:6px; padding:26px; background:var(--card);
+      margin-top:18px;
+    }
+    .file-drop input[type=file] { display:none; }
+    .upload-box {
+      display:flex; align-items:center; justify-content:center; min-height:140px;
+      border:1px dashed var(--rule); background:rgba(255,255,255,0.25); border-radius:6px;
+      text-align:center; color:var(--ink-soft); cursor:pointer;
+    }
+
+    .result-box {
+      margin-top:18px; background:#fff; border:1px solid var(--rule); border-radius:6px; padding:20px;
+      min-height:160px;
+    }
+    .result-box pre {
+      white-space:pre-wrap; word-break:break-word; font-family:'IBM Plex Sans', sans-serif;
+      font-size:14px; line-height:1.6;
+    }
+
+    .conversation-list {
+      display:flex; flex-direction:column; gap:12px; margin-top:20px;
+    }
+    .conversation-line {
+      display:grid; grid-template-columns:120px 1fr;
+      gap:16px; padding:10px 0; border-bottom:1px solid var(--rule);
+    }
+    .speaker { font-family:'IBM Plex Mono', monospace; font-size:11px; color:var(--cobalt); }
+    .line-text { font-family:'Source Serif 4', serif; font-size:18px; }
+    .line-sub { font-size:13px; color:var(--ink-soft); }
+
+    .history-toolbar {
+      display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap;
+      margin-bottom:18px;
+    }
+    .search-box {
+      padding:10px 12px; border:1px solid var(--rule); border-radius:6px;
+      background:var(--paper); color:var(--ink); width:min(100%, 320px);
+      font-size:14px;
+    }
+    .history-list {
+      display:grid; grid-template-columns:repeat(auto-fit, minmax(260px,1fr)); gap:16px;
+    }
+    .history-item {
+      background:var(--card); border:1px solid var(--rule); border-radius:6px; padding:16px;
+    }
+    .history-item h4 {
+      font-family:'Source Serif 4', serif; font-size:18px; margin-bottom:8px;
+    }
+    .history-meta {
+      font-family:'IBM Plex Mono', monospace; font-size:11px; color:var(--ink-soft);
+      margin-bottom:10px;
+    }
+    .history-item p {
+      color:var(--ink-soft); font-size:14px; line-height:1.5;
+      margin-top:8px;
+    }
+
+    .speech-controls {
+      display:flex; align-items:center; gap:12px; margin-top:22px;
+      padding-top:20px; border-top:1px dashed var(--rule); flex-wrap:wrap;
+    }
+    .secondary-btn {
+      background:#fff; color:var(--ink); border:1px solid var(--rule);
+      padding:9px 20px; font-weight:500; cursor:pointer;
+    }
+    .speech-status {
+      font-family:'IBM Plex Mono', monospace; font-size:12px;
+      color:var(--cobalt); margin-top:14px;
+    }
+
+    .toast-container {
+      position:fixed; right:20px; bottom:20px; display:flex; flex-direction:column; gap:10px; z-index:1000;
+    }
+    .toast {
+      min-width:220px; max-width:320px; padding:12px 16px; border-radius:10px;
+      background:rgba(28, 38, 42, 0.96); color:#f4f8fb; border-left:4px solid #4ecf8a;
+      box-shadow:0 16px 28px rgba(0,0,0,0.18); opacity:0; transform:translateY(12px);
+      transition:opacity 0.25s ease, transform 0.25s ease;
+      font-size:14px;
+    }
+    .toast.show { opacity:1; transform:translateY(0); }
+    .toast.error { border-left-color:#ff9a78; }
+
+    footer { padding:32px 0 60px; display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px; font-size:13px; color:var(--ink-soft); }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <nav>
+      <div class="brand-wrap">
+        <div class="brand-mark">L</div>
+        <div class="brand-text">Lingua <span class="brand-badge">AI</span></div>
+      </div>
+      <div class="navlinks">
+        <a href="#text">Text</a>
+        <a href="#image">Image</a>
+        <a href="#document">Documents</a>
+        <a href="#conversation">Conversation</a>
+        {% if user %}
+          <a href="/dashboard">Dashboard</a>
+        {% else %}
+          <a href="/login">Login</a>
+        {% endif %}
+      </div>
+      <div style="display:flex; align-items:center; gap:12px;">
+        <button class="theme-toggle" id="themeToggle" type="button">Dark mode</button>
+        <a class="navcta" href="{% if user %}/dashboard{% else %}/login{% endif %}">
+          {% if user %}Open dashboard{% else %}Start translating{% endif %}
+        </a>
+      </div>
+    </nav>
+
+    <div class="hero">
+      <div class="hero-copy">
+        <div class="kicker">ML + NLP TRANSLATION PLATFORM</div>
+        <h1>Translate anything, in context.</h1>
+        <p class="sub">A web app for text, image, document, and live conversation translation using Python with NLP-powered translation workflows.</p>
+        <div class="hero-badges">
+          <span class="mini-badge">✨ AI-powered</span>
+          <span class="mini-badge">📄 PDF &amp; DOCX</span>
+          <span class="mini-badge">💬 Live chat</span>
+          <span class="mini-badge">🎧 Audio ready</span>
+        </div>
+      </div>
+
+      <div class="hero-visual">
+        <div class="visual-surface">
+          <div class="floating-card card-1"><span>✨</span> Smart translations</div>
+          <div class="floating-card card-2"><span>📸</span> OCR image input</div>
+          <div class="floating-card card-3"><span>📄</span> PDF &amp; DOCX</div>
+          <div class="floating-card card-4"><span>💬</span> Conversation mode</div>
+        </div>
+      </div>
+
+      <div class="panel" id="text" style="grid-column: 1 / -1;">
+        <div class="panel-label">
+          <span>LIVE DEMO — text translation</span>
+          <span id="charcount">32 characters</span>
+        </div>
+
+        <div class="demo-grid">
+          <div>
+            <textarea id="inputText" placeholder="Type a phrase…">Where is the nearest train station?</textarea>
+          </div>
+          <div class="arrow-col">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </div>
+          <div>
+            <div class="output-text" id="outputText">Où se trouve la gare la plus proche ?</div>
+            <div class="phonetic" id="outputPhonetic">/u sə tʁuv la ɡaʁ la plys pʁɔʃ/</div>
+          </div>
+        </div>
+
+        <div class="demo-controls">
+          <select id="langSelect">
+            <option value="fr">French</option>
+            <option value="ja">Japanese</option>
+            <option value="es">Spanish</option>
+            <option value="de">German</option>
+            <option value="ar">Arabic</option>
+          </select>
+          <button id="translateBtn">Translate</button>
+          <button id="downloadTextBtn" class="secondary-btn">Download text</button>
+          <span class="phrase-hint" id="phraseHint">Try one of the sample phrases below, or type your own.</span>
+        </div>
+      </div>
+    </div>
+
+    <section id="features">
+      <div class="section-head">
+        <h2>Core features</h2>
+        <div class="section-note">Built for modern multilingual translation workflows.</div>
+      </div>
+      <div class="feature-grid">
+        <div class="feature-card">
+          <h3><span class="emoji">✨</span> Text translation</h3>
+          <p>Instant translation with language selection, sample phrases, and phonetic support.</p>
+        </div>
+        <div class="feature-card">
+          <h3><span class="emoji">📸</span> Image translation</h3>
+          <p>Extract text from uploaded images via OCR and translate it into your selected language.</p>
+        </div>
+        <div class="feature-card">
+          <h3><span class="emoji">📄</span> Document translation</h3>
+          <p>Upload PDFs or DOCX files and translate the content while preserving structure.</p>
+        </div>
+        <div class="feature-card">
+          <h3><span class="emoji">💬</span> Conversation translation</h3>
+          <p>Serve live bilingual transcript flows using translated line-by-line message output.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="image">
+      <div class="section-head">
+        <h2>Image translation</h2>
+        <div class="section-note">Upload an image and the system will OCR the text, translate it, and return the result.</div>
+      </div>
+
+      <div class="file-drop">
+        <label class="upload-box" for="imageUpload">
+          <div>
+            <div><strong>Choose image</strong></div>
+            <div>PNG, JPG, JPEG</div>
+          </div>
+        </label>
+        <input id="imageUpload" type="file" accept="image/*">
+      </div>
+
+      <div class="demo-controls">
+        <select id="imageLangSelect">
+          <option value="en">English</option>
+          <option value="fr">French</option>
+          <option value="ja">Japanese</option>
+          <option value="es">Spanish</option>
+        </select>
+        <button id="imageTranslateBtn">Translate image</button>
+        <button id="downloadImageBtn" class="secondary-btn">Download result</button>
+      </div>
+
+      <div class="result-box">
+        <pre id="imageResult">Upload an image to see extracted text and translated output.</pre>
+      </div>
+    </section>
+
+    <section id="document">
+      <div class="section-head">
+        <h2>Document translation</h2>
+        <div class="section-note">Upload a PDF or DOCX file for translation into your target language.</div>
+      </div>
+
+      <div class="file-drop">
+        <label class="upload-box" for="documentUpload">
+          <div>
+            <div><strong>Choose document</strong></div>
+            <div>PDF or DOCX</div>
+          </div>
+        </label>
+        <input id="documentUpload" type="file" accept=".pdf,.docx">
+      </div>
+
+      <div class="demo-controls">
+        <select id="documentLangSelect">
+          <option value="en">English</option>
+          <option value="fr">French</option>
+          <option value="ja">Japanese</option>
+          <option value="de">German</option>
+        </select>
+        <button id="documentTranslateBtn">Translate document</button>
+        <button id="downloadDocumentBtn" class="secondary-btn">Download result</button>
+      </div>
+
+      <div class="result-box">
+        <pre id="documentResult">Upload a document to see its translated content.</pre>
+      </div>
+    </section>
+
+    <section id="conversation">
+      <div class="section-head">
+        <h2>Conversation translation</h2>
+        <div class="section-note">Translate a live conversation transcript line by line.</div>
+      </div>
+
+      <div class="tabs">
+        <button class="tab active" data-sample="0">Sample 1</button>
+        <button class="tab" data-sample="1">Sample 2</button>
+      </div>
+
+      <div class="panel">
+        <div class="demo-controls">
+          <select id="conversationLangSelect">
+            <option value="ja">Japanese</option>
+            <option value="fr">French</option>
+            <option value="es">Spanish</option>
+            <option value="de">German</option>
+          </select>
+          <button id="conversationTranslateBtn">Translate conversation</button>
+        </div>
+        <div id="conversationList" class="conversation-list"></div>
+      </div>
+    </section>
+
+    <section id="speech">
+      <div class="section-head">
+        <h2>Live speech translation</h2>
+        <div class="section-note">Use your microphone for spoken input and get translated captions in real time.</div>
+      </div>
+
+      <div class="panel">
+        <div class="speech-controls">
+          <select id="speechTargetLang">
+            <option value="ja">Japanese</option>
+            <option value="fr">French</option>
+            <option value="es">Spanish</option>
+            <option value="de">German</option>
+            <option value="ar">Arabic</option>
+          </select>
+          <button id="startSpeechBtn">Start live speech</button>
+          <button id="stopSpeechBtn" class="secondary-btn">Stop</button>
+        </div>
+        <div id="speechStatus" class="speech-status">Ready</div>
+        <div id="speechTranscript" class="conversation-list"></div>
+      </div>
+    </section>
+
+    <section id="audio">
+      <div class="section-head">
+        <h2>Audio translation</h2>
+        <div class="section-note">Upload a recorded audio clip to extract speech and translate it automatically.</div>
+      </div>
+
+      <div class="file-drop">
+        <label class="upload-box" for="audioUpload">
+          <div>
+            <div><strong>Choose audio</strong></div>
+            <div>MP3, WAV, M4A</div>
+          </div>
+        </label>
+        <input id="audioUpload" type="file" accept="audio/*">
+      </div>
+
+      <div class="demo-controls">
+        <select id="audioLangSelect">
+          <option value="fr">French</option>
+          <option value="ja">Japanese</option>
+          <option value="es">Spanish</option>
+          <option value="de">German</option>
+        </select>
+        <button id="audioTranslateBtn">Translate audio</button>
+      </div>
+
+      <div class="result-box">
+        <pre id="audioResult">Upload an audio file to see the transcript and translated result.</pre>
+      </div>
+    </section>
+
+    <section id="history">
+      <div class="section-head">
+        <h2>Translation history</h2>
+        <div class="section-note">Recent translations saved by the app for quick review.</div>
+      </div>
+      <div class="history-toolbar">
+        <input id="historySearch" class="search-box" type="text" placeholder="Search translations..." />
+      </div>
+      <div id="historyList" class="history-list"></div>
+    </section>
+
+    <footer>
+      <span>Lingua, a translation feature concept</span>
+      <span>Python · ML · NLP · Flask</span>
+    </footer>
+  </div>
+
+  <div id="toastContainer" class="toast-container" aria-live="polite"></div>
+
+  <script>
+    const userLoggedIn = {{ 'true' if user else 'false' }};
+
+    const phrases = {
+      "where is the nearest train station?": {
+        fr: {text:"Où se trouve la gare la plus proche ?", phon:"/u sə tʁuv la ɡaʁ la plys pʁɔʃ/"},
+        ja: {text:"一番近い駅はどこですか？", phon:"ichiban chikai eki wa doko desu ka?"},
+        es: {text:"¿Dónde está la estación de tren más cercana?", phon:""},
+        de: {text:"Wo ist der nächste Bahnhof?", phon:""},
+        ar: {text:"أين أقرب محطة قطار؟", phon:"ayna aqrab mahattat qitar?"}
+      },
+      "could you send that file over when you get a chance?": {
+        fr: {text:"Pourrais-tu m'envoyer ce fichier quand tu auras un moment ?", phon:""},
+        ja: {text:"お手すきの際にそのファイルを送っていただけますか？", phon:"otesuki no sai ni sono fairu wo okutte itadakemasu ka?"},
+        es: {text:"¿Podrías enviarme ese archivo cuando puedas?", phon:""},
+        de: {text:"Könntest du mir die Datei schicken, wenn du Zeit hast?", phon:""},
+        ar: {text:"هل يمكنك إرسال هذا الملف عندما تسنح لك الفرصة؟", phon:""}
+      },
+      "this is amazing, thank you so much!": {
+        fr: {text:"C'est incroyable, merci beaucoup !", phon:""},
+        ja: {text:"すごい、本当にありがとう！", phon:"sugoi, hontō ni arigatō!"},
+        es: {text:"¡Esto es increíble, muchas gracias!", phon:""},
+        de: {text:"Das ist unglaublich, vielen Dank!", phon:""},
+        ar: {text:"هذا رائع، شكرًا جزيلاً لك!", phon:""}
+      }
+    };
+
+    const input = document.getElementById('inputText');
+    const output = document.getElementById('outputText');
+    const phon = document.getElementById('outputPhonetic');
+    const langSelect = document.getElementById('langSelect');
+    const charcount = document.getElementById('charcount');
+    const themeToggle = document.getElementById('themeToggle');
+    const toastContainer = document.getElementById('toastContainer');
+    const translateBtn = document.getElementById('translateBtn');
+    const imageTranslateBtn = document.getElementById('imageTranslateBtn');
+    const documentTranslateBtn = document.getElementById('documentTranslateBtn');
+    const conversationTranslateBtn = document.getElementById('conversationTranslateBtn');
+    const audioTranslateBtn = document.getElementById('audioTranslateBtn');
+
+    function showToast(message, type = 'success') {
+      if (!toastContainer) return;
+      const toast = document.createElement('div');
+      toast.className = `toast ${type}`;
+      toast.textContent = message;
+      toastContainer.appendChild(toast);
+
+      requestAnimationFrame(() => toast.classList.add('show'));
+
+      setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => toast.remove(), 250);
+      }, 2300);
+    }
+
+    function setLoading(button, isLoading, label = '') {
+      if (!button) return;
+      if (isLoading) {
+        button.classList.add('is-loading');
+        button.disabled = true;
+        button.dataset.originalText = button.textContent;
+        button.textContent = label || 'Loading...';
+      } else {
+        button.classList.remove('is-loading');
+        button.disabled = false;
+        if (button.dataset.originalText) {
+          button.textContent = button.dataset.originalText;
+        }
+      }
+    }
+
+    function applyTheme(theme) {
+      const isDark = theme === 'dark';
+      document.body.classList.toggle('dark', isDark);
+      if (themeToggle) {
+        themeToggle.textContent = isDark ? 'Light mode' : 'Dark mode';
+      }
+      try {
+        localStorage.setItem('lingua-theme', theme);
+      } catch (e) {}
+    }
+
+    const preferredTheme = localStorage.getItem('lingua-theme') || 'light';
+    applyTheme(preferredTheme);
+
+    themeToggle?.addEventListener('click', () => {
+      const nextTheme = document.body.classList.contains('dark') ? 'light' : 'dark';
+      applyTheme(nextTheme);
+    });
+
+    function updateCharCount(){
+      charcount.textContent = input.value.length + " characters";
+    }
+
+    async function doTranslate() {
+      const text = input.value.trim();
+      const lang = langSelect.value;
+      const key = text.toLowerCase().replace(/\s+/g, ' ');
+
+      setLoading(translateBtn, true, 'Translating...');
+
+      if (phrases[key] && phrases[key][lang]) {
+        output.textContent = phrases[key][lang].text;
+        phon.textContent = phrases[key][lang].phon || '';
+        phon.style.display = phrases[key][lang].phon ? 'block' : 'none';
+        showToast('Translation ready! ✨');
+        setLoading(translateBtn, false);
+        return;
+      }
+
+      try {
+        const response = await fetch('/api/translate/text', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ text, target_lang: lang })
+        });
+        const data = await response.json();
+        output.textContent = data.translated_text || text;
+        phon.textContent = data.phonetic || '';
+        phon.style.display = data.phonetic ? 'block' : 'none';
+        showToast('Translation ready! ✨');
+      } catch (e) {
+        output.textContent = 'Unable to translate right now.';
+        phon.style.display = 'none';
+        showToast('Translation failed. Please try again.', 'error');
+      } finally {
+        setLoading(translateBtn, false);
+      }
+    }
+
+    input.addEventListener('input', updateCharCount);
+    document.getElementById('translateBtn').addEventListener('click', doTranslate);
+    langSelect.addEventListener('change', doTranslate);
+    updateCharCount();
+
+    const imageUpload = document.getElementById('imageUpload');
+    const imageLangSelect = document.getElementById('imageLangSelect');
+    const imageResult = document.getElementById('imageResult');
+
+    imageTranslateBtn.addEventListener('click', async () => {
+      const file = imageUpload.files[0];
+      if (!file) {
+        imageResult.textContent = 'Please choose an image first.';
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('target_lang', imageLangSelect.value);
+
+      imageResult.textContent = 'Translating image...';
+      setLoading(imageTranslateBtn, true, 'Translating...');
+
+      try {
+        const response = await fetch('/api/translate/image', {
+          method: 'POST',
+          body: formData
+        });
+        const data = await response.json();
+        imageResult.textContent = `OCR text:\n${data.ocr_text}\n\nTranslated text:\n${data.translated_text}`;
+        showToast('Image translation complete! 📸');
+      } catch (e) {
+        imageResult.textContent = 'Image translation failed.';
+        showToast('Image translation failed. Please try again.', 'error');
+      } finally {
+        setLoading(imageTranslateBtn, false);
+      }
+    });
+
+    const documentUpload = document.getElementById('documentUpload');
+    const documentLangSelect = document.getElementById('documentLangSelect');
+    const documentResult = document.getElementById('documentResult');
+
+    documentTranslateBtn.addEventListener('click', async () => {
+      const file = documentUpload.files[0];
+      if (!file) {
+        documentResult.textContent = 'Please choose a PDF or DOCX file first.';
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('target_lang', documentLangSelect.value);
+
+      documentResult.textContent = 'Translating document...';
+      setLoading(documentTranslateBtn, true, 'Translating...');
+
+      try {
+        const response = await fetch('/api/translate/document', {
+          method: 'POST',
+          body: formData
+        });
+        const data = await response.json();
+        if (response.ok) {
+          documentResult.textContent = `Original text:\n${data.original_text}\n\nTranslated text:\n${data.translated_text}`;
+          showToast('Document translated! 📄');
+        } else {
+          documentResult.textContent = data.error || 'Document translation failed.';
+          showToast(data.error || 'Document translation failed.', 'error');
+        }
+      } catch (e) {
+        documentResult.textContent = 'Document translation failed.';
+        showToast('Document translation failed.', 'error');
+      } finally {
+        setLoading(documentTranslateBtn, false);
+      }
+    });
+
+    document.getElementById('downloadTextBtn').addEventListener('click', () => {
+      if (!output.textContent.trim()) return;
+      downloadTextFile('lingua-text-translation.txt', `${input.value}\n\n--- translated ---\n${output.textContent}`);
+    });
+
+    document.getElementById('downloadImageBtn').addEventListener('click', () => {
+      if (!imageResult.textContent || imageResult.textContent.includes('Upload an image')) return;
+      downloadTextFile('lingua-image-translation.txt', imageResult.textContent);
+    });
+
+    document.getElementById('downloadDocumentBtn').addEventListener('click', () => {
+      if (!documentResult.textContent || documentResult.textContent.includes('Upload a document')) return;
+      downloadTextFile('lingua-document-translation.txt', documentResult.textContent);
+    });
+
+    const conversationSamples = [
+      [
+        { speaker: 'YOU · EN', text: 'Do you have this in a smaller size?' },
+        { speaker: 'THEM · JA', text: 'はい、Sサイズがございます。' },
+        { speaker: 'YOU · EN', text: 'Great, I\'ll take that one.' },
+        { speaker: 'THEM · JA', text: 'かしこまりました。レジまでご案内します。' }
+      ],
+      [
+        { speaker: 'YOU · EN', text: 'Can you send the meeting notes by evening?' },
+        { speaker: 'THEM · FR', text: 'Oui, je peux les envoyer ce soir.' },
+        { speaker: 'YOU · EN', text: 'Thanks, that would be really helpful.' },
+        { speaker: 'THEM · FR', text: 'Avec plaisir, je vous les envoie rapidement.' }
+      ]
+    ];
+
+    const conversationList = document.getElementById('conversationList');
+    const conversationLangSelect = document.getElementById('conversationLangSelect');
+    const speechTargetLang = document.getElementById('speechTargetLang');
+    const startSpeechBtn = document.getElementById('startSpeechBtn');
+    const stopSpeechBtn = document.getElementById('stopSpeechBtn');
+    const speechStatus = document.getElementById('speechStatus');
+    const speechTranscript = document.getElementById('speechTranscript');
+    const historyList = document.getElementById('historyList');
+    const historySearch = document.getElementById('historySearch');
+    const tabs = document.querySelectorAll('.tab');
+    let currentSampleIndex = 0;
+    let recognition = null;
+    let historyData = [];
+
+    function renderConversation(lines) {
+      conversationList.innerHTML = '';
+      lines.forEach((line) => {
+        const row = document.createElement('div');
+        row.className = 'conversation-line';
+        row.innerHTML = `
+          <div class="speaker">${line.speaker}</div>
+          <div>
+            <div class="line-text">${line.text}</div>
+            <div class="line-sub">${line.translated_text || ''}</div>
+          </div>
+        `;
+        conversationList.appendChild(row);
+      });
+    }
+
+    function downloadTextFile(filename, text) {
+      const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    function renderHistory(items) {
+      historyList.innerHTML = '';
+
+      if (!items || items.length === 0) {
+        historyList.innerHTML = '<div class="history-item"><h4>No matching history</h4><p>Try a different search term or make another translation.</p></div>';
+        return;
+      }
+
+      items.forEach((item) => {
+        const card = document.createElement('div');
+        card.className = 'history-item';
+        const deleteMarkup = userLoggedIn ? `
+          <div class="demo-controls" style="padding-top:12px; margin-top:12px; border-top:1px dashed var(--rule); justify-content:flex-end;">
+            <button type="button" class="secondary-btn" data-delete-id="${item.id}" style="background: var(--paper); color: var(--ink); border:1px solid var(--rule);">Delete</button>
+          </div>
+        ` : '';
+        card.innerHTML = `
+          <div class="history-meta">${item.type.toUpperCase()} · ${item.target_lang}</div>
+          <h4>${item.target_lang.toUpperCase()}</h4>
+          <p><strong>Source:</strong> ${item.source.slice(0, 140)}${item.source.length > 140 ? '...' : ''}</p>
+          <p><strong>Translated:</strong> ${item.translated_text.slice(0, 140)}${item.translated_text.length > 140 ? '...' : ''}</p>
+          ${deleteMarkup}
+        `;
+        historyList.appendChild(card);
+      });
+
+      historyList.querySelectorAll('[data-delete-id]').forEach((button) => {
+        button.addEventListener('click', async () => {
+          const id = Number(button.getAttribute('data-delete-id'));
+          try {
+            const response = await fetch(`/api/history/${id}`, { method: 'DELETE' });
+            if (!response.ok) {
+              throw new Error('Delete failed');
+            }
+            await loadHistory();
+            showToast('History item removed. 🧹');
+          } catch (error) {
+            historyList.innerHTML = '<div class="history-item"><h4>Unable to delete</h4><p>Please try again later.</p></div>';
+            showToast('Could not remove history item.', 'error');
+          }
+        });
+      });
+    }
+
+    async function loadHistory() {
+      try {
+        const response = await fetch('/api/history');
+        const data = await response.json();
+        historyData = data.history || [];
+        const query = (historySearch?.value || '').trim().toLowerCase();
+
+        if (!query) {
+          renderHistory(historyData.slice(0, 6));
+          return;
+        }
+
+        const filtered = historyData.filter((item) => {
+          const text = `${item.type} ${item.target_lang} ${item.source} ${item.translated_text}`.toLowerCase();
+          return text.includes(query);
+        });
+
+        renderHistory(filtered.slice(0, 6));
+      } catch (error) {
+        historyList.innerHTML = '<div class="history-item"><h4>History unavailable</h4><p>The history service is not responding right now.</p></div>';
+      }
+    }
+
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        tabs.forEach(t => t.classList.toggle('active', t === tab));
+        currentSampleIndex = Number(tab.dataset.sample);
+        renderConversation(conversationSamples[currentSampleIndex].map(line => ({ ...line, translated_text: '' })));
+      });
+    });
+
+    conversationTranslateBtn.addEventListener('click', async () => {
+      const sample = conversationSamples[currentSampleIndex];
+      renderConversation(sample.map(line => ({ ...line, translated_text: 'Translating...' })));
+      setLoading(conversationTranslateBtn, true, 'Translating...');
+
+      try {
+        const response = await fetch('/api/translate/conversation', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ lines: sample, target_lang: conversationLangSelect.value })
+        });
+        const data = await response.json();
+        renderConversation(data.lines || []);
+        showToast('Conversation translated! 💬');
+      } catch (e) {
+        renderConversation(sample.map(line => ({ ...line, translated_text: 'Translation unavailable.' })));
+        showToast('Conversation translation failed.', 'error');
+      } finally {
+        setLoading(conversationTranslateBtn, false);
+      }
+    });
+
+    function addSpeechMessage(sourceText, translatedText = 'Translating...') {
+      const row = document.createElement('div');
+      row.className = 'conversation-line';
+      row.innerHTML = `
+        <div class="speaker">YOU · LIVE</div>
+        <div>
+          <div class="line-text">${sourceText}</div>
+          <div class="line-sub">${translatedText}</div>
+        </div>
+      `;
+      speechTranscript.appendChild(row);
+      speechTranscript.scrollTop = speechTranscript.scrollHeight;
+    }
+
+    async function translateSpeechText(text) {
+      const response = await fetch('/api/translate/text', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text, target_lang: speechTargetLang.value })
+      });
+      const data = await response.json();
+      return data.translated_text || text;
+    }
+
+    function speakTranslatedText(text) {
+      if (!('speechSynthesis' in window)) return;
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = speechTargetLang.value === 'ja' ? 'ja-JP' : speechTargetLang.value === 'fr' ? 'fr-FR' : speechTargetLang.value === 'es' ? 'es-ES' : 'en-US';
+      window.speechSynthesis.cancel();
+      window.speechSynthesis.speak(utterance);
+    }
+
+    function startSpeechRecognition() {
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SpeechRecognition) {
+        speechStatus.textContent = 'Speech recognition is not supported in this browser.';
+        return;
+      }
+
+      if (recognition) {
+        recognition.stop();
+      }
+
+      recognition = new SpeechRecognition();
+      recognition.continuous = true;
+      recognition.interimResults = true;
+      recognition.lang = 'en-US';
+
+      recognition.onstart = () => {
+        speechStatus.textContent = 'Listening…';
+        startSpeechBtn.disabled = true;
+      };
+
+      recognition.onresult = async (event) => {
+        let interimText = '';
+        for (let i = event.resultIndex; i < event.results.length; i++) {
+          const transcript = event.results[i][0].transcript.trim();
+          if (event.results[i].isFinal) {
+            const cleaned = transcript.replace(/\s+/g, ' ');
+            if (cleaned) {
+              addSpeechMessage(cleaned, 'Translating…');
+              try {
+                const translated = await translateSpeechText(cleaned);
+                const lastRow = speechTranscript.lastElementChild;
+                if (lastRow) {
+                  lastRow.querySelector('.line-sub').textContent = translated;
+                }
+                speakTranslatedText(translated);
+              } catch (error) {
+                const lastRow = speechTranscript.lastElementChild;
+                if (lastRow) {
+                  lastRow.querySelector('.line-sub').textContent = 'Translation unavailable.';
+                }
+              }
+            }
+          } else {
+            interimText += transcript + ' ';
+          }
+        }
+
+        if (interimText.trim()) {
+          speechStatus.textContent = `Listening… ${interimText.trim()}`;
+        }
+      };
+
+      recognition.onerror = (event) => {
+        speechStatus.textContent = `Speech error: ${event.error}`;
+      };
+
+      recognition.onend = () => {
+        speechStatus.textContent = 'Ready';
+        startSpeechBtn.disabled = false;
+      };
+
+      recognition.start();
+    }
+
+    startSpeechBtn.addEventListener('click', startSpeechRecognition);
+    stopSpeechBtn.addEventListener('click', () => {
+      if (recognition) {
+        recognition.stop();
+      }
+      speechStatus.textContent = 'Stopped';
+      startSpeechBtn.disabled = false;
+    });
+
+    renderConversation(conversationSamples[0].map(line => ({ ...line, translated_text: '' })));
+    historySearch?.addEventListener('input', loadHistory);
+    loadHistory();
+
+    const audioUpload = document.getElementById('audioUpload');
+    const audioLangSelect = document.getElementById('audioLangSelect');
+    const audioResult = document.getElementById('audioResult');
+
+    audioTranslateBtn.addEventListener('click', async () => {
+      const file = audioUpload.files[0];
+      if (!file) {
+        audioResult.textContent = 'Please choose an audio file first.';
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('target_lang', audioLangSelect.value);
+
+      audioResult.textContent = 'Translating audio...';
+      setLoading(audioTranslateBtn, true, 'Translating...');
+
+      try {
+        const response = await fetch('/api/translate/audio', {
+          method: 'POST',
+          body: formData
+        });
+        const data = await response.json();
+        if (!response.ok) {
+          throw new Error(data.error || 'Audio translation failed.');
+        }
+        audioResult.textContent = `Transcript:\n${data.transcript}\n\nTranslated text:\n${data.translated_text}`;
+        showToast('Audio translated! 🎧');
+      } catch (error) {
+        audioResult.textContent = error.message || 'Audio translation failed.';
+        showToast(error.message || 'Audio translation failed.', 'error');
+      } finally {
+        setLoading(audioTranslateBtn, false);
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lingua Dashboard</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f4efe7;
+      color: #1d1d1d;
+    }
+    .wrap {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 24px 80px;
+    }
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      padding-bottom: 18px;
+      border-bottom: 1px solid #d4c9b8;
+      flex-wrap: wrap;
+    }
+    .brand {
+      font-size: 1.8rem;
+      font-weight: 700;
+    }
+    .nav {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      flex-wrap: wrap;
+    }
+    .nav a,
+    button {
+      text-decoration: none;
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .nav a {
+      color: #1d1d1d;
+      background: transparent;
+      border: 1px solid #d8ceb9;
+    }
+    button {
+      border: none;
+      background: #2e4374;
+      color: white;
+    }
+    .hero {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 18px;
+      margin-top: 28px;
+    }
+    .card {
+      background: #fffdfb;
+      border: 1px solid #d9d0c1;
+      border-radius: 12px;
+      padding: 22px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.03);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 30px rgba(46,67,116,0.08);
+    }
+    .welcome-banner {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(135deg, #fffdfb 0%, #eef3ff 100%);
+    }
+    .welcome-banner::after {
+      content: '✨';
+      position: absolute;
+      right: 24px;
+      top: 20px;
+      font-size: 2rem;
+      opacity: 0.35;
+    }
+    .welcome-chips {
+      display:flex; flex-wrap:wrap; gap:10px; margin-top:18px;
+    }
+    .welcome-chip {
+      display:inline-flex; align-items:center; gap:6px;
+      background: #f3f0eb; border:1px solid #d9d0c1; border-radius:999px;
+      padding:7px 10px; font-size:0.82rem; color:#3d3832;
+    }
+    .label {
+      font-size: 0.8rem;
+      color: #625d55;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .value {
+      font-size: 2rem;
+      font-weight: 700;
+    }
+    h2 {
+      margin-top: 32px;
+      margin-bottom: 18px;
+      font-size: 1.6rem;
+    }
+    .history-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 18px;
+    }
+    .history-item {
+      background: #fffdfb;
+      border: 1px solid #d9d0c1;
+      border-radius: 12px;
+      padding: 18px;
+    }
+    .meta {
+      color: #5d564e;
+      font-size: 0.85rem;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    p {
+      margin: 0;
+      line-height: 1.6;
+      color: #2d2d2d;
+    }
+    .muted {
+      color: #5d564e;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="topbar">
+      <div class="brand">Lingua</div>
+      <div class="nav">
+        <a href="/">Home</a>
+        <a href="/login">Login</a>
+        <button id="logoutBtn">Logout</button>
+      </div>
+    </div>
+
+    <div class="card welcome-banner" style="margin-top: 25px;">
+      <div class="label">Welcome back</div>
+      <div class="value" style="font-size: 2.1rem;">{{ user.username }} 👋</div>
+      <p class="muted" style="margin-top: 10px;">
+        Your personal translation workspace is ready. Review recent activity and continue translating.
+      </p>
+      <div class="welcome-chips">
+        <span class="welcome-chip">✨ Ready to translate</span>
+        <span class="welcome-chip">📄 Docs &amp; images</span>
+        <span class="welcome-chip">💬 Conversation mode</span>
+      </div>
+    </div>
+
+    <div class="hero">
+      <div class="card">
+        <div class="label">Saved translations</div>
+        <div class="value">{{ stats.total }}</div>
+      </div>
+      <div class="card">
+        <div class="label">Text translations</div>
+        <div class="value">{{ stats.text }}</div>
+      </div>
+      <div class="card">
+        <div class="label">Multimodal items</div>
+        <div class="value" style="font-size: 1.3rem;">{{ stats.image + stats.document + stats.conversation + stats.audio }}</div>
+      </div>
+      <div class="card">
+        <div class="label">Audio translations</div>
+        <div class="value">{{ stats.audio }}</div>
+      </div>
+    </div>
+
+    {% if latest %}
+      <div class="card" style="margin-top: 24px;">
+        <div class="label">Latest translation</div>
+        <div class="value" style="font-size: 1.4rem; margin-bottom: 10px;">{{ latest.type | upper }}</div>
+        <p><strong>Source:</strong> {{ latest.source[:180] }}{% if latest.source|length > 180 %}...{% endif %}</p>
+        <p style="margin-top: 10px;"><strong>Result:</strong> {{ latest.translated_text[:180] }}{% if latest.translated_text|length > 180 %}...{% endif %}</p>
+      </div>
+    {% endif %}
+
+    <h2>Recent history</h2>
+    <div class="history-grid">
+      {% if history %}
+        {% for item in history %}
+          <div class="history-item">
+            <div class="meta">{{ item.type }} · {{ item.target_lang }}</div>
+            <p><strong>Source:</strong> {{ item.source[:140] }}{% if item.source|length > 140 %}...{% endif %}</p>
+            <p style="margin-top: 8px;"><strong>Translated:</strong> {{ item.translated_text[:140] }}{% if item.translated_text|length > 140 %}...{% endif %}</p>
+          </div>
+        {% endfor %}
+      {% else %}
+        <div class="history-item">
+          <div class="meta">No activity yet</div>
+          <p>Your translations will appear here after you use the app.</p>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('logoutBtn')?.addEventListener('click', async () => {
+      await fetch('/api/auth/logout', { method: 'POST' });
+      window.location.href = '/login';
+    });
+  </script>
+</body>
+</html>

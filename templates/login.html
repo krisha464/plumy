@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lingua Login</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f4efe7;
+      color: #1d1d1d;
+    }
+    .wrap {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 40px 24px;
+    }
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 20px;
+      border-bottom: 1px solid #d4c9b8;
+    }
+    .brand {
+      font-size: 1.8rem;
+      font-weight: 700;
+    }
+    .nav a {
+      margin-left: 16px;
+      text-decoration: none;
+      color: #2d2d2d;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+      margin-top: 40px;
+    }
+    .card {
+      background: #fffdfb;
+      border: 1px solid #d9d0c1;
+      border-radius: 12px;
+      padding: 24px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.03);
+    }
+    .switcher {
+      display: inline-flex;
+      background: #eee4d5;
+      border-radius: 999px;
+      padding: 4px;
+      margin-bottom: 18px;
+      gap: 4px;
+    }
+    .switcher button {
+      border: none;
+      background: transparent;
+      color: #4c4740;
+      padding: 8px 16px;
+      border-radius: 999px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    .switcher button.active {
+      background: #2e4374;
+      color: white;
+    }
+    h2 {
+      margin: 0 0 12px;
+      font-size: 1.5rem;
+    }
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    input {
+      padding: 12px 14px;
+      border: 1px solid #cfc3ae;
+      border-radius: 8px;
+      font-size: 1rem;
+    }
+    button {
+      padding: 12px 16px;
+      border: none;
+      border-radius: 8px;
+      background: #2e4374;
+      color: white;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .message {
+      min-height: 20px;
+      font-size: 0.92rem;
+      color: #7d4f1d;
+      margin-top: 8px;
+      font-weight: 600;
+    }
+    .helper {
+      font-size: 0.9rem;
+      color: #5d564e;
+      margin-top: -4px;
+    }
+    .muted {
+      color: #5d564e;
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="topbar">
+      <div class="brand">Lingua</div>
+      <div class="nav">
+        <a href="/">Home</a>
+        <a href="/dashboard">Dashboard</a>
+      </div>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <div class="switcher">
+          <button id="loginTab" class="active" type="button">Login</button>
+          <button id="registerTab" type="button">Register</button>
+        </div>
+
+        <div id="loginPanel">
+          <h2>Login</h2>
+          <div class="helper">Welcome back to your Lingua workspace.</div>
+          <form id="loginForm" style="margin-top: 14px;">
+            <input type="text" id="loginUsername" placeholder="Username" required />
+            <input type="password" id="loginPassword" placeholder="Password" required />
+            <button type="submit">Login</button>
+          </form>
+          <div id="loginMessage" class="message"></div>
+        </div>
+
+        <div id="registerPanel" style="display:none;">
+          <h2>Register</h2>
+          <div class="helper">Create an account to save your translation history.</div>
+          <form id="registerForm" style="margin-top: 14px;">
+            <input type="text" id="registerUsername" placeholder="Choose username" required />
+            <input type="password" id="registerPassword" placeholder="Choose password" required />
+            <button type="submit">Create account</button>
+          </form>
+          <div id="registerMessage" class="message"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top: 24px;">
+      <h2>About your workspace</h2>
+      <p class="muted">
+        This app includes text, image, document, conversation, and speech-style translation flows.
+        Sign in to save your translation history and access the dashboard.
+      </p>
+    </div>
+  </div>
+
+  <script>
+    const loginForm = document.getElementById('loginForm');
+    const registerForm = document.getElementById('registerForm');
+
+    async function postJson(url, body) {
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.error || 'Request failed');
+      }
+      return data;
+    }
+
+    const loginTab = document.getElementById('loginTab');
+    const registerTab = document.getElementById('registerTab');
+    const loginPanel = document.getElementById('loginPanel');
+    const registerPanel = document.getElementById('registerPanel');
+
+    function showPanel(panelName) {
+      const isLogin = panelName === 'login';
+      loginTab.classList.toggle('active', isLogin);
+      registerTab.classList.toggle('active', !isLogin);
+      loginPanel.style.display = isLogin ? 'block' : 'none';
+      registerPanel.style.display = isLogin ? 'none' : 'block';
+    }
+
+    loginTab.addEventListener('click', () => showPanel('login'));
+    registerTab.addEventListener('click', () => showPanel('register'));
+
+    loginForm.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const message = document.getElementById('loginMessage');
+      try {
+        message.textContent = 'Logging in…';
+        await postJson('/api/auth/login', {
+          username: document.getElementById('loginUsername').value,
+          password: document.getElementById('loginPassword').value
+        });
+        window.location.href = '/dashboard';
+      } catch (error) {
+        message.textContent = error.message;
+      }
+    });
+
+    registerForm.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const message = document.getElementById('registerMessage');
+      try {
+        message.textContent = 'Creating account…';
+        await postJson('/api/auth/register', {
+          username: document.getElementById('registerUsername').value,
+          password: document.getElementById('registerPassword').value
+        });
+        window.location.href = '/dashboard';
+      } catch (error) {
+        message.textContent = error.message;
+      }
+    });
+  </script>
+</body>
+</html>
