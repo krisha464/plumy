@@ -365,6 +365,28 @@
     h2 { font-family:'Source Serif 4', serif; font-weight:500; font-size:28px; }
     .section-note { font-size:13.5px; color:var(--ink-soft); max-width:32ch; }
 
+    .mode-detail {
+      display:block;
+      border-top:1px solid var(--rule);
+      padding:32px 0;
+    }
+    .mode-detail summary {
+      list-style:none;
+      cursor:pointer;
+    }
+    .mode-detail summary::-webkit-details-marker {
+      display:none;
+    }
+    .mode-detail summary .section-head {
+      margin-bottom:0;
+    }
+    .mode-detail summary:hover h2 {
+      color:var(--brand-1);
+    }
+    .mode-detail .detail-body {
+      margin-top:24px;
+    }
+
     .tabs {
       display:flex; flex-wrap:wrap; gap:12px; margin-bottom:24px;
     }
@@ -824,157 +846,172 @@
       </div>
     </section>
 
-    <section id="image">
-      <div class="section-head">
-        <h2>Image translation</h2>
-        <div class="section-note">Upload an image and the system will OCR the text, translate it, and return the result.</div>
-      </div>
+    <details id="image" class="mode-detail">
+      <summary>
+        <div class="section-head">
+          <h2>Image translation</h2>
+          <div class="section-note">Upload an image and the system will OCR the text, translate it, and return the result.</div>
+        </div>
+      </summary>
+      <div class="detail-body">
+        <div class="file-drop">
+          <label class="upload-box" for="imageUpload">
+            <div>
+              <div><strong>Choose image</strong></div>
+              <div>PNG, JPG, JPEG</div>
+            </div>
+          </label>
+          <input id="imageUpload" type="file" accept="image/*">
+        </div>
 
-      <div class="file-drop">
-        <label class="upload-box" for="imageUpload">
-          <div>
-            <div><strong>Choose image</strong></div>
-            <div>PNG, JPG, JPEG</div>
-          </div>
-        </label>
-        <input id="imageUpload" type="file" accept="image/*">
-      </div>
-
-      <div class="demo-controls">
-        <select id="imageLangSelect" aria-label="Select image translation language">
-          <option value="en">English</option>
-          <option value="fr">French</option>
-          <option value="ja">Japanese</option>
-          <option value="es">Spanish</option>
-        </select>
-        <button id="imageTranslateBtn">Translate image</button>
-        <button id="downloadImageBtn" class="secondary-btn">Download result</button>
-      </div>
-
-      <div class="result-box is-empty" id="imageResultBox" aria-live="polite">
-        <pre id="imageResult">Upload an image to see extracted text and translated output.</pre>
-      </div>
-      <div class="result-actions">
-        <button class="icon-button secondary" type="button" data-copy-target="imageResult">Copy result</button>
-      </div>
-    </section>
-
-    <section id="document">
-      <div class="section-head">
-        <h2>Document translation</h2>
-        <div class="section-note">Upload a PDF or DOCX file for translation into your target language.</div>
-      </div>
-
-      <div class="file-drop">
-        <label class="upload-box" for="documentUpload">
-          <div>
-            <div><strong>Choose document</strong></div>
-            <div>PDF or DOCX</div>
-          </div>
-        </label>
-        <input id="documentUpload" type="file" accept=".pdf,.docx">
-      </div>
-
-      <div class="demo-controls">
-        <select id="documentLangSelect" aria-label="Select document translation language">
-          <option value="en">English</option>
-          <option value="fr">French</option>
-          <option value="ja">Japanese</option>
-          <option value="de">German</option>
-        </select>
-        <button id="documentTranslateBtn">Translate document</button>
-        <button id="downloadDocumentBtn" class="secondary-btn">Download result</button>
-      </div>
-
-      <div class="result-box is-empty" id="documentResultBox" aria-live="polite">
-        <pre id="documentResult">Upload a document to see its translated content.</pre>
-      </div>
-      <div class="result-actions">
-        <button class="icon-button secondary" type="button" data-copy-target="documentResult">Copy result</button>
-      </div>
-    </section>
-
-    <section id="conversation">
-      <div class="section-head">
-        <h2>Conversation translation</h2>
-        <div class="section-note">Translate a live conversation transcript line by line.</div>
-      </div>
-
-      <div class="tabs">
-        <button class="tab active" data-sample="0">Sample 1</button>
-        <button class="tab" data-sample="1">Sample 2</button>
-      </div>
-
-      <div class="panel">
         <div class="demo-controls">
-          <select id="conversationLangSelect">
-            <option value="ja">Japanese</option>
+          <select id="imageLangSelect" aria-label="Select image translation language">
+            <option value="en">English</option>
             <option value="fr">French</option>
+            <option value="ja">Japanese</option>
             <option value="es">Spanish</option>
+          </select>
+          <button id="imageTranslateBtn">Translate image</button>
+          <button id="downloadImageBtn" class="secondary-btn">Download result</button>
+        </div>
+
+        <div class="result-box is-empty" id="imageResultBox" aria-live="polite">
+          <pre id="imageResult">Upload an image to see extracted text and translated output.</pre>
+        </div>
+        <div class="result-actions">
+          <button class="icon-button secondary" type="button" data-copy-target="imageResult">Copy result</button>
+        </div>
+      </div>
+    </details>
+
+    <details id="document" class="mode-detail">
+      <summary>
+        <div class="section-head">
+          <h2>Document translation</h2>
+          <div class="section-note">Upload a PDF or DOCX file for translation into your target language.</div>
+        </div>
+      </summary>
+      <div class="detail-body">
+        <div class="file-drop">
+          <label class="upload-box" for="documentUpload">
+            <div>
+              <div><strong>Choose document</strong></div>
+              <div>PDF or DOCX</div>
+            </div>
+          </label>
+          <input id="documentUpload" type="file" accept=".pdf,.docx">
+        </div>
+
+        <div class="demo-controls">
+          <select id="documentLangSelect" aria-label="Select document translation language">
+            <option value="en">English</option>
+            <option value="fr">French</option>
+            <option value="ja">Japanese</option>
             <option value="de">German</option>
           </select>
-          <button id="conversationTranslateBtn">Translate conversation</button>
+          <button id="documentTranslateBtn">Translate document</button>
+          <button id="downloadDocumentBtn" class="secondary-btn">Download result</button>
         </div>
-        <div id="conversationList" class="conversation-list"></div>
-      </div>
-    </section>
 
-    <section id="speech">
-      <div class="section-head">
-        <h2>Live speech translation</h2>
-        <div class="section-note">Use your microphone for spoken input and get translated captions in real time.</div>
-      </div>
-
-      <div class="panel">
-        <div class="speech-controls">
-          <select id="speechTargetLang">
-            <option value="ja">Japanese</option>
-            <option value="fr">French</option>
-            <option value="es">Spanish</option>
-            <option value="de">German</option>
-            <option value="ar">Arabic</option>
-          </select>
-          <button id="startSpeechBtn">Start live speech</button>
-          <button id="stopSpeechBtn" class="secondary-btn">Stop</button>
+        <div class="result-box is-empty" id="documentResultBox" aria-live="polite">
+          <pre id="documentResult">Upload a document to see its translated content.</pre>
         </div>
-        <div id="speechStatus" class="speech-status">Ready</div>
-        <div id="speechTranscript" class="conversation-list"></div>
+        <div class="result-actions">
+          <button class="icon-button secondary" type="button" data-copy-target="documentResult">Copy result</button>
+        </div>
       </div>
-    </section>
+    </details>
 
-    <section id="audio">
-      <div class="section-head">
-        <h2>Audio translation</h2>
-        <div class="section-note">Upload a recorded audio clip to extract speech and translate it automatically.</div>
-      </div>
+    <details id="conversation" class="mode-detail">
+      <summary>
+        <div class="section-head">
+          <h2>Conversation translation</h2>
+          <div class="section-note">Translate a live conversation transcript line by line.</div>
+        </div>
+      </summary>
+      <div class="detail-body">
+        <div class="tabs">
+          <button class="tab active" data-sample="0">Sample 1</button>
+          <button class="tab" data-sample="1">Sample 2</button>
+        </div>
 
-      <div class="file-drop">
-        <label class="upload-box" for="audioUpload">
-          <div>
-            <div><strong>Choose audio</strong></div>
-            <div>MP3, WAV, M4A</div>
+        <div class="panel">
+          <div class="demo-controls">
+            <select id="conversationLangSelect">
+              <option value="ja">Japanese</option>
+              <option value="fr">French</option>
+              <option value="es">Spanish</option>
+              <option value="de">German</option>
+            </select>
+            <button id="conversationTranslateBtn">Translate conversation</button>
           </div>
-        </label>
-        <input id="audioUpload" type="file" accept="audio/*">
+          <div id="conversationList" class="conversation-list"></div>
+        </div>
       </div>
+    </details>
 
-      <div class="demo-controls">
-        <select id="audioLangSelect" aria-label="Select audio translation language">
-          <option value="fr">French</option>
-          <option value="ja">Japanese</option>
-          <option value="es">Spanish</option>
-          <option value="de">German</option>
-        </select>
-        <button id="audioTranslateBtn">Translate audio</button>
+    <details id="speech" class="mode-detail">
+      <summary>
+        <div class="section-head">
+          <h2>Live speech translation</h2>
+          <div class="section-note">Use your microphone for spoken input and get translated captions in real time.</div>
+        </div>
+      </summary>
+      <div class="detail-body">
+        <div class="panel">
+          <div class="speech-controls">
+            <select id="speechTargetLang">
+              <option value="ja">Japanese</option>
+              <option value="fr">French</option>
+              <option value="es">Spanish</option>
+              <option value="de">German</option>
+              <option value="ar">Arabic</option>
+            </select>
+            <button id="startSpeechBtn">Start live speech</button>
+            <button id="stopSpeechBtn" class="secondary-btn">Stop</button>
+          </div>
+          <div id="speechStatus" class="speech-status">Ready</div>
+          <div id="speechTranscript" class="conversation-list"></div>
+        </div>
       </div>
+    </details>
 
-      <div class="result-box is-empty" id="audioResultBox" aria-live="polite">
-        <pre id="audioResult">Upload an audio file to see the transcript and translated result.</pre>
+    <details id="audio" class="mode-detail">
+      <summary>
+        <div class="section-head">
+          <h2>Audio translation</h2>
+          <div class="section-note">Upload a recorded audio clip to extract speech and translate it automatically.</div>
+        </div>
+      </summary>
+      <div class="detail-body">
+        <div class="file-drop">
+          <label class="upload-box" for="audioUpload">
+            <div>
+              <div><strong>Choose audio</strong></div>
+              <div>MP3, WAV, M4A</div>
+            </div>
+          </label>
+          <input id="audioUpload" type="file" accept="audio/*">
+        </div>
+
+        <div class="demo-controls">
+          <select id="audioLangSelect" aria-label="Select audio translation language">
+            <option value="fr">French</option>
+            <option value="ja">Japanese</option>
+            <option value="es">Spanish</option>
+            <option value="de">German</option>
+          </select>
+          <button id="audioTranslateBtn">Translate audio</button>
+        </div>
+
+        <div class="result-box is-empty" id="audioResultBox" aria-live="polite">
+          <pre id="audioResult">Upload an audio file to see the transcript and translated result.</pre>
+        </div>
+        <div class="result-actions">
+          <button class="icon-button secondary" type="button" data-copy-target="audioResult">Copy result</button>
+        </div>
       </div>
-      <div class="result-actions">
-        <button class="icon-button secondary" type="button" data-copy-target="audioResult">Copy result</button>
-      </div>
-    </section>
+    </details>
 
     <section id="history">
       <div class="section-head">
