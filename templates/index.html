@@ -420,6 +420,57 @@
     }
     .feature-card p { color:var(--ink-soft); }
 
+    .sub-secondary {
+      margin-top:16px;
+      font-size:16px;
+      color:var(--ink-soft);
+      max-width:38ch;
+    }
+
+    .flow-grid {
+      display:grid;
+      grid-template-columns:repeat(auto-fit, minmax(150px, 1fr));
+      gap:14px;
+      margin-top:22px;
+    }
+
+    .flow-step {
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      padding:18px 16px;
+      border:1px solid var(--rule);
+      border-radius:16px;
+      background:linear-gradient(135deg, rgba(255,255,255,0.52), rgba(255,255,255,0.24));
+      min-height:118px;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.25);
+    }
+
+    .step-no {
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      width:26px;
+      height:26px;
+      border-radius:50%;
+      background:linear-gradient(135deg, var(--brand-1), var(--brand-2));
+      color:#fff;
+      font-size:11px;
+      font-weight:700;
+      letter-spacing:0.04em;
+    }
+
+    .flow-step strong {
+      font-size:14px;
+      font-weight:700;
+    }
+
+    .flow-step span {
+      color:var(--ink-soft);
+      font-size:12.5px;
+      line-height:1.45;
+    }
+
     .file-drop {
       border:1px dashed var(--rule); border-radius:6px; padding:26px; background:var(--card);
       margin-top:18px;
@@ -733,9 +784,10 @@
 
     <div class="hero">
       <div class="hero-copy">
-        <div class="kicker">ML + NLP TRANSLATION PLATFORM</div>
-        <h1>Translate anything, in context.</h1>
-        <p class="sub">Text. Images. Documents. Audio. Conversation. Lingua brings them together in one clean translation workspace built for modern multilingual workflows.</p>
+        <div class="kicker">AI TRANSLATION WORKSPACE</div>
+        <h1>Lingua AI</h1>
+        <p class="sub">Translate text, images, documents and speech — all in one workspace.</p>
+        <p class="sub-secondary">Powered by NLP, OCR and speech processing.</p>
         <div class="hero-badges">
           <span class="mini-badge">✨ AI-powered</span>
           <span class="mini-badge">📸 OCR image input</span>
@@ -743,7 +795,7 @@
           <span class="mini-badge">💬 Live conversation</span>
         </div>
         <div class="demo-controls" style="margin-top:26px; padding-top:0; border-top:none;">
-          <a class="navcta" href="#workspace">Start translating</a>
+          <a class="navcta" href="#workspace">Start Translating →</a>
           <a class="secondary-btn" href="#features" style="text-decoration:none; display:inline-flex; align-items:center; justify-content:center;">See what it supports</a>
         </div>
       </div>
@@ -800,7 +852,7 @@
         </div>
         <div class="feature-card">
           <h3><span class="emoji">💬</span> Conversation</h3>
-          <p>Translate live dialogue or transcripts line by line with multilingual message support.</p>
+          <p>Translate live dialogue or transcripts line by line with multilingual message support, language detection, and conversation history.</p>
         </div>
       </div>
     </section>
@@ -926,7 +978,7 @@
       <summary>
         <div class="section-head">
           <h2>Conversation translation</h2>
-          <div class="section-note">Translate a live conversation transcript line by line.</div>
+          <div class="section-note">Translate live dialogue or transcripts line by line with language detection, segmentation, translation, and conversation history.</div>
         </div>
       </summary>
       <div class="detail-body">
@@ -947,6 +999,34 @@
           </div>
           <div id="conversationList" class="conversation-list"></div>
         </div>
+
+        <div class="flow-grid" aria-label="Conversation translation flow">
+          <div class="flow-step">
+            <div class="step-no">1</div>
+            <strong>Input</strong>
+            <span>Chat messages or transcript lines enter the workspace.</span>
+          </div>
+          <div class="flow-step">
+            <div class="step-no">2</div>
+            <strong>Language detection</strong>
+            <span>Source language is identified before translation begins.</span>
+          </div>
+          <div class="flow-step">
+            <div class="step-no">3</div>
+            <strong>Segmentation</strong>
+            <span>Messages are split into clear conversational units.</span>
+          </div>
+          <div class="flow-step">
+            <div class="step-no">4</div>
+            <strong>Translation</strong>
+            <span>Each segment is translated into the selected target language.</span>
+          </div>
+          <div class="flow-step">
+            <div class="step-no">5</div>
+            <strong>Conversation history</strong>
+            <span>Results are preserved in context for review and reuse.</span>
+          </div>
+        </div>
       </div>
     </details>
 
@@ -954,7 +1034,7 @@
       <summary>
         <div class="section-head">
           <h2>Live speech translation</h2>
-          <div class="section-note">Use your microphone for spoken input and get translated captions in real time.</div>
+          <div class="section-note">Use your microphone for spoken input and get translated captions in real time through speech-to-text, language processing, and streaming translation.</div>
         </div>
       </summary>
       <div class="detail-body">
@@ -972,6 +1052,34 @@
           </div>
           <div id="speechStatus" class="speech-status">Ready</div>
           <div id="speechTranscript" class="conversation-list"></div>
+        </div>
+
+        <div class="flow-grid" aria-label="Live speech translation flow">
+          <div class="flow-step">
+            <div class="step-no">1</div>
+            <strong>Microphone</strong>
+            <span>Live audio is captured from the browser input device.</span>
+          </div>
+          <div class="flow-step">
+            <div class="step-no">2</div>
+            <strong>Speech-to-text</strong>
+            <span>Spoken words are transcribed into readable text.</span>
+          </div>
+          <div class="flow-step">
+            <div class="step-no">3</div>
+            <strong>Language processing</strong>
+            <span>Source language and context are analyzed for quality translation.</span>
+          </div>
+          <div class="flow-step">
+            <div class="step-no">4</div>
+            <strong>Translation</strong>
+            <span>Transcribed speech is converted into the requested target language.</span>
+          </div>
+          <div class="flow-step">
+            <div class="step-no">5</div>
+            <strong>Live captions</strong>
+            <span>Translated output appears immediately as streaming captions.</span>
+          </div>
         </div>
       </div>
     </details>
