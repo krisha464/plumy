@@ -1,5 +1,5 @@
 ﻿from flask import Flask, jsonify, render_template, request, session, redirect, url_for
-from deep_translator import GoogleTranslator
+from deep_translator import GoogleTranslator, MyMemoryTranslator
 from pypdf import PdfReader
 from docx import Document
 from PIL import Image
@@ -53,6 +53,22 @@ NLLB_LANG_CODES = {
     "zh": "zho_Hans",
     "pa": "pan_Guru",
     "nl": "nld_Latn",
+}
+
+MY_MEMORY_LANG_NAMES = {
+    "fr": "french",
+    "ja": "japanese",
+    "es": "spanish",
+    "de": "german",
+    "ar": "arabic",
+    "en": "english",
+    "ko": "korean",
+    "hi": "hindi",
+    "pt": "portuguese",
+    "it": "italian",
+    "zh": "chinese traditional",
+    "pa": "punjabi",
+    "nl": "dutch",
 }
 
 FALLBACK_TRANSLATIONS = {
@@ -205,6 +221,42 @@ def fallback_translation(text: str, target_lang: str):
     return {"text": text, "phon": ""}
 
 
+def get_mymemory_language_name(code: str):
+    code = (code or "").strip().lower()
+    if not code:
+        return "english"
+
+    if code.startswith("zh"):
+        return "chinese traditional"
+
+    normalized = code.split("-")[0]
+    return MY_MEMORY_LANG_NAMES.get(normalized, "english")
+
+
+def translate_with_mymemory(text: str, target_lang: str):
+    if not text or not target_lang:
+        return ""
+
+    try:
+        source_lang = detect(text)
+    except LangDetectException:
+        source_lang = "en"
+
+    source_name = get_mymemory_language_name(source_lang)
+    target_name = get_mymemory_language_name(target_lang)
+
+    if source_name == target_name:
+        return text
+
+    try:
+        translated = MyMemoryTranslator(source=source_name, target=target_name).translate(text)
+        translated = sanitize_translated_text(translated)
+        return translated
+    except Exception as exc:
+        app.logger.warning("MyMemory translation failed: %s", exc)
+        return ""
+
+
 def chunk_text(text: str, chunk_size: int = 1200):
     paragraphs = [p.strip() for p in re.split(r"\n\s*\n", text) if p.strip()]
     if not paragraphs:
@@ -307,6 +359,10 @@ def translate_text(text: str, target_lang: str = "fr"):
             return {"text": translated, "phon": ""}
     except Exception as exc:
         app.logger.warning("GoogleTranslator failed: %s", exc)
+
+    translated = translate_with_mymemory(text, target_lang)
+    if translated:
+        return {"text": translated, "phon": ""}
 
     return {"text": text, "phon": ""}
 
