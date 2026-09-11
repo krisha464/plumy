@@ -1,9 +1,0 @@
-.git
-.venv
-__pycache__
-*.pyc
-*.pyo
-*.pyd
-.gitignore
-lingua.db
-translation_history.json

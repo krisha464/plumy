@@ -1,0 +1,14 @@
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.venv/
+.env
+.env.*
+.dockerignore
+.env.example
+Dockerfile
+Procfile
+render.yaml
+lingua.db
+translation_history.json
