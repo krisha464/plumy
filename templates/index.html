@@ -20,6 +20,9 @@
       --brand-2: #6A8AC6;
       --brand-3: #F5C56B;
       --brand-4: #E67E62;
+      --glow: rgba(106,138,198,0.26);
+      --glow-soft: rgba(245,197,107,0.18);
+      --surface-alt: rgba(255,255,255,0.58);
     }
 
     body.dark {
@@ -34,16 +37,40 @@
     }
 
     * { box-sizing: border-box; margin:0; padding:0; }
+    html { scroll-behavior: smooth; }
     body {
+      position: relative;
+      overflow-x: hidden;
       background:
         radial-gradient(circle at top left, rgba(106,138,198,0.12), transparent 32%),
         radial-gradient(circle at bottom right, rgba(230,126,98,0.10), transparent 28%),
+        linear-gradient(160deg, rgba(255,255,255,0.20), transparent 38%),
         var(--paper);
       color: var(--ink);
       font-family:'IBM Plex Sans', sans-serif;
       line-height:1.5;
     }
-    .wrap { max-width: 1180px; margin:0 auto; padding:0 28px; }
+    body::before,
+    body::after {
+      content:"";
+      position: fixed;
+      inset: auto auto -15rem -8rem;
+      width: 32rem;
+      height: 32rem;
+      border-radius: 50%;
+      background: radial-gradient(circle, var(--glow) 0%, rgba(106,138,198,0.12) 30%, transparent 72%);
+      filter: blur(32px);
+      pointer-events: none;
+      z-index: 0;
+      animation: driftOrb 18s ease-in-out infinite alternate;
+    }
+    body::after {
+      inset: -8rem -12rem auto auto;
+      background: radial-gradient(circle, var(--glow-soft) 0%, rgba(245,197,107,0.10) 28%, transparent 70%);
+      animation-duration: 22s;
+      animation-delay: 1s;
+    }
+    .wrap { position: relative; z-index:1; max-width: 1180px; margin:0 auto; padding:0 28px; }
     a { color:inherit; }
 
     nav {
@@ -72,9 +99,15 @@
     .navlinks { display:flex; gap:32px; font-size:14px; }
     .navlinks a { text-decoration:none; color:var(--ink-soft); }
     .navcta {
-      font-size:14px; padding:9px 18px; background:var(--ink); color:var(--paper);
-      border-radius:3px; text-decoration:none;
-      margin-left:16px;
+      font-size:14px; padding:10px 18px; background:linear-gradient(135deg, var(--brand-1), var(--brand-2));
+      color:#fff; border-radius:999px; text-decoration:none; margin-left:16px;
+      box-shadow:0 16px 28px rgba(46,67,116,0.20); border:1px solid rgba(255,255,255,0.18);
+      transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+    }
+    .navcta:hover {
+      transform: translateY(-1px);
+      box-shadow:0 18px 32px rgba(46,67,116,0.26);
+      filter: brightness(1.02);
     }
     .hero-badges {
       display:flex; flex-wrap:wrap; gap:10px; margin-top:18px;
@@ -89,6 +122,27 @@
       font-size:14px; padding:9px 16px; background:transparent; color:var(--ink);
       border:1px solid var(--rule); border-radius:3px; cursor:pointer;
     }
+    .mobile-menu-toggle {
+      display:none; width:42px; height:42px; border:1px solid var(--rule); border-radius:10px;
+      background:var(--card); color:var(--ink); cursor:pointer; align-items:center; justify-content:center;
+      flex-direction:column; gap:4px; padding:0;
+    }
+    .mobile-menu-toggle span {
+      display:block; width:18px; height:2px; border-radius:999px; background:var(--ink);
+    }
+
+    button, input, select, textarea {
+      transition: background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease, opacity 0.2s ease;
+    }
+
+    button:focus-visible,
+    select:focus-visible,
+    textarea:focus-visible,
+    input:focus-visible,
+    a:focus-visible {
+      outline: 3px solid rgba(106, 138, 198, 0.45);
+      outline-offset: 3px;
+    }
 
     .hero {
       padding:64px 0 40px;
@@ -102,34 +156,85 @@
       order:2;
       max-width:640px;
       justify-self:end;
+      animation: fadeUp 0.75s ease both;
     }
     .hero-visual {
       order:1;
       display:flex; justify-content:flex-start;
       margin-top:0;
+      animation: fadeUp 0.9s ease both;
     }
     .visual-surface {
       position:relative; width:min(100%, 720px); min-height:390px;
-      background:linear-gradient(135deg, rgba(255,255,255,0.28), rgba(255,255,255,0.08));
+      background:
+        linear-gradient(135deg, rgba(255,255,255,0.34), rgba(255,255,255,0.08)),
+        linear-gradient(180deg, rgba(106,138,198,0.06), rgba(46,67,116,0.02));
       border:1px solid rgba(216,209,192,0.95); border-radius:32px; overflow:hidden;
       box-shadow:0 28px 60px rgba(46,67,116,0.08), inset 0 1px 0 rgba(255,255,255,0.35);
-    }
-    .visual-surface::before, .visual-surface::after {
-      content:""; position:absolute; border-radius:50%; filter:blur(18px);
-      opacity:0.55;
+      isolation:isolate;
     }
     .visual-surface::before {
-      width:180px; height:180px; background:rgba(106,138,198,0.22); top:-36px; left:-18px;
+      content:""; position:absolute; inset:0; background-image:
+        linear-gradient(rgba(108,132,176,0.12) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(108,132,176,0.12) 1px, transparent 1px);
+      background-size:22px 22px; mask-image: radial-gradient(circle at center, black 60%, transparent 100%);
+      opacity:0.9;
     }
     .visual-surface::after {
-      width:220px; height:220px; background:rgba(245,197,107,0.20); bottom:-50px; right:-20px;
+      content:""; position:absolute; border-radius:50%; filter:blur(18px);
+      opacity:0.55;
+      width:180px; height:180px; background:rgba(106,138,198,0.22); top:-36px; left:-18px;
+      animation: pulseGlow 6s ease-in-out infinite;
+    }
+    .mini-preview {
+      position:absolute; left:50%; top:50%; transform:translate(-50%, -50%);
+      width:min(76%, 440px); background:rgba(255,255,255,0.78); backdrop-filter: blur(10px);
+      border:1px solid rgba(216,209,192,0.90); border-radius:24px;
+      box-shadow:0 24px 50px rgba(46,67,116,0.10), 0 0 0 1px rgba(255,255,255,0.18) inset;
+      padding:20px 22px;
+      z-index:1;
+      animation: pulseCard 7s ease-in-out infinite;
+    }
+    .mini-preview-header {
+      display:flex; justify-content:space-between; font-family:'IBM Plex Mono', monospace;
+      font-size:11px; color:var(--ink-soft); letter-spacing:0.04em;
+      text-transform:uppercase; margin-bottom:16px;
+    }
+    .mini-preview-box {
+      background:rgba(237,232,220,0.60); border:1px solid rgba(216,209,192,0.90);
+      border-radius:18px; padding:18px 18px 14px;
+    }
+    .mini-preview-row {
+      display:grid; grid-template-columns:1fr auto 1fr; gap:16px; align-items:center;
+      font-family:'IBM Plex Sans', sans-serif;
+    }
+    .mini-preview-text {
+      background:rgba(255,255,255,0.30); border-radius:10px; padding:12px 14px;
+      font-size:15px; color:var(--ink); line-height:1.4;
+    }
+    .mini-preview-text.translated {
+      background:rgba(46,67,116,0.06); border:1px solid rgba(46,67,116,0.12);
+      font-weight:600;
+    }
+    .mini-preview-arrow {
+      color:var(--rust); font-size:20px; font-weight:700; line-height:1;
+    }
+    .mini-preview-footer {
+      display:flex; justify-content:space-between; align-items:center; gap:12px;
+      margin-top:16px; color:var(--ink-soft); font-size:12px;
+    }
+    .translation-pill {
+      display:inline-flex; align-items:center; gap:6px; padding:6px 10px;
+      border-radius:999px; background:rgba(46,67,116,0.10); color:var(--cobalt);
+      font-weight:700;
     }
     .floating-card {
       position:absolute; display:flex; align-items:center; gap:10px; border-radius:18px;
-      background:rgba(255,255,255,0.76); backdrop-filter: blur(6px);
-      border:1px solid rgba(255,255,255,0.75); box-shadow:0 20px 38px rgba(0,0,0,0.08);
+      background:linear-gradient(135deg, rgba(255,255,255,0.82), rgba(255,255,255,0.62)); backdrop-filter: blur(10px);
+      border:1px solid rgba(255,255,255,0.75); box-shadow:0 20px 38px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.35);
       padding:18px 20px; font-size:15px; font-weight:600; color:var(--ink);
       animation: floatCard 5s ease-in-out infinite;
+      z-index:2;
     }
     .card-1 { top:38px; left:58px; }
     .card-2 { top:112px; right:62px; animation-delay:1s; }
@@ -157,8 +262,8 @@
     }
 
     .panel {
-      margin-top:40px; background:var(--card); border:1px solid var(--rule);
-      border-radius:6px; padding:32px; position:relative;
+      margin-top:40px; background:linear-gradient(135deg, rgba(255,255,255,0.45), rgba(255,255,255,0.18)); border:1px solid var(--rule);
+      border-radius:22px; padding:32px; position:relative; box-shadow: inset 0 1px 0 rgba(255,255,255,0.28);
     }
     .panel-label {
       font-family:'IBM Plex Mono', monospace; font-size:11px; color:var(--ink-soft);
@@ -189,6 +294,27 @@
       padding-top:20px; border-top:1px dashed var(--rule); flex-wrap:wrap;
     }
 
+    .result-actions {
+      display:flex; justify-content:flex-end; align-items:center; gap:10px; flex-wrap:wrap;
+      margin-top:16px;
+    }
+
+    .icon-button {
+      display:inline-flex; align-items:center; justify-content:center; gap:8px;
+      border:1px solid var(--rule); background:var(--paper); color:var(--ink);
+      border-radius:999px; padding:8px 14px; font-size:12.5px; font-weight:600;
+      cursor:pointer;
+    }
+
+    .icon-button.secondary {
+      background:var(--card);
+    }
+
+    .icon-button:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 18px rgba(46,67,116,0.08);
+    }
+
     select, button {
       font-family:'IBM Plex Sans', sans-serif; font-size:13.5px;
       border-radius:3px;
@@ -197,12 +323,14 @@
       padding:8px 12px; border:1px solid var(--rule); background:var(--paper); color:var(--ink);
     }
     button {
-      background:var(--cobalt); color:#fff; border:none; padding:9px 20px; font-weight:500; cursor:pointer;
-      transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+      background:linear-gradient(135deg, var(--brand-1), var(--brand-2)); color:#fff; border:none; padding:9px 20px; font-weight:500; cursor:pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease, filter 0.2s ease;
+      box-shadow:0 12px 22px rgba(46,67,116,0.16);
     }
     button:hover {
       transform: translateY(-1px);
-      box-shadow:0 10px 18px rgba(46,67,116,0.16);
+      box-shadow:0 14px 26px rgba(46,67,116,0.2);
+      filter: brightness(1.02);
     }
     button.is-loading {
       position:relative; padding-left:38px; opacity:0.92;
@@ -213,6 +341,23 @@
       border-top-color: transparent; animation:spin 0.7s linear infinite;
     }
     @keyframes spin { to { transform:rotate(360deg); } }
+    @keyframes driftOrb {
+      0% { transform: translate3d(-10px, 10px, 0) scale(1); }
+      50% { transform: translate3d(18px, -18px, 0) scale(1.08); }
+      100% { transform: translate3d(8px, 16px, 0) scale(0.96); }
+    }
+    @keyframes pulseGlow {
+      0%, 100% { transform: scale(1); opacity: 0.45; }
+      50% { transform: scale(1.12); opacity: 0.7; }
+    }
+    @keyframes pulseCard {
+      0%, 100% { transform: translate(-50%, -50%) scale(1); }
+      50% { transform: translate(-50%, -52%) scale(1.01); }
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(14px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
     .phrase-hint { font-size:12.5px; color:var(--ink-soft); margin-left:auto; }
 
     section { padding:56px 0; border-top:1px solid var(--rule); }
@@ -235,12 +380,14 @@
       display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:20px;
     }
     .feature-card {
-      background:var(--card); border:1px solid var(--rule); border-radius:6px; padding:24px;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      background:linear-gradient(135deg, rgba(255,255,255,0.58), rgba(255,255,255,0.30)); border:1px solid var(--rule); border-radius:18px; padding:24px;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.22);
     }
     .feature-card:hover {
       transform: translateY(-3px);
-      box-shadow: 0 16px 28px rgba(46,67,116,0.08);
+      box-shadow: 0 18px 30px rgba(46,67,116,0.10);
+      border-color: rgba(106,138,198,0.38);
     }
     .feature-card h3 {
       font-size:18px; font-family:'Source Serif 4', serif; margin-bottom:10px;
@@ -260,15 +407,49 @@
       display:flex; align-items:center; justify-content:center; min-height:140px;
       border:1px dashed var(--rule); background:rgba(255,255,255,0.25); border-radius:6px;
       text-align:center; color:var(--ink-soft); cursor:pointer;
+      transition: border-color 0.2s ease, background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .upload-box:hover {
+      border-color: var(--brand-2);
+      background: rgba(106,138,198,0.04);
+      transform: translateY(-1px);
+    }
+    .upload-box.drag-over {
+      border-color: var(--brand-2);
+      background: rgba(106,138,198,0.08);
+      box-shadow: inset 0 0 0 1px rgba(106,138,198,0.24);
+    }
+    .upload-box.has-file {
+      border-style: solid;
+      border-color: rgba(46,67,116,0.45);
+      background: rgba(46,67,116,0.04);
+    }
+    .upload-box.is-loading {
+      opacity: 0.75;
+      pointer-events: none;
     }
 
     .result-box {
-      margin-top:18px; background:#fff; border:1px solid var(--rule); border-radius:6px; padding:20px;
-      min-height:160px;
+      margin-top:18px; background:linear-gradient(135deg, rgba(255,255,255,0.80), rgba(255,255,255,0.52)); border:1px solid var(--rule); border-radius:18px; padding:20px;
+      min-height:160px; box-shadow: inset 0 1px 0 rgba(255,255,255,0.28);
+      transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
     }
     .result-box pre {
       white-space:pre-wrap; word-break:break-word; font-family:'IBM Plex Sans', sans-serif;
       font-size:14px; line-height:1.6;
+    }
+    .result-box.is-empty {
+      border-style: dashed;
+      color: var(--ink-soft);
+      background: rgba(255,255,255,0.45);
+    }
+    .result-box.is-error {
+      border-color: rgba(180,71,44,0.45);
+      background: rgba(180,71,44,0.04);
+    }
+    .result-box.is-loading {
+      border-color: rgba(106,138,198,0.45);
+      background: rgba(106,138,198,0.03);
     }
 
     .conversation-list {
@@ -295,7 +476,8 @@
       display:grid; grid-template-columns:repeat(auto-fit, minmax(260px,1fr)); gap:16px;
     }
     .history-item {
-      background:var(--card); border:1px solid var(--rule); border-radius:6px; padding:16px;
+      background:linear-gradient(135deg, rgba(255,255,255,0.52), rgba(255,255,255,0.24)); border:1px solid var(--rule); border-radius:16px; padding:16px;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.20);
     }
     .history-item h4 {
       font-family:'Source Serif 4', serif; font-size:18px; margin-bottom:8px;
@@ -336,9 +518,162 @@
     .toast.error { border-left-color:#ff9a78; }
 
     footer { padding:32px 0 60px; display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px; font-size:13px; color:var(--ink-soft); }
+    .mobile-quick-actions {
+      position:fixed; left:12px; right:12px; bottom:12px; z-index:1100;
+      display:none; gap:10px; padding:10px; border-radius:16px;
+      background:rgba(250,248,243,0.9); border:1px solid var(--rule);
+      box-shadow:0 18px 36px rgba(28,27,25,0.12); backdrop-filter: blur(10px);
+    }
+    .mobile-quick-actions a {
+      flex:1; text-align:center; text-decoration:none; display:inline-flex; align-items:center; justify-content:center;
+    }
+
+    @media (max-width: 860px) {
+      nav {
+        flex-wrap: wrap;
+        gap: 16px;
+      }
+      .navlinks {
+        width: 100%;
+        justify-content: space-between;
+        order: 3;
+      }
+      .hero {
+        grid-template-columns: 1fr;
+      }
+      .hero-copy {
+        justify-self: stretch;
+      }
+      .hero-visual {
+        order: 2;
+      }
+      .visual-surface {
+        min-height: 330px;
+      }
+      .navcta {
+        margin-left: 0;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .wrap {
+        padding: 0 18px 86px;
+      }
+      .navlinks {
+        display:none;
+        gap: 14px;
+        font-size: 12px;
+        flex-wrap: wrap;
+        width:100%;
+        padding:12px; border:1px solid var(--rule); border-radius:12px;
+        background:var(--card);
+      }
+      .navlinks.open {
+        display:flex;
+      }
+      .navlinks a {
+        flex:1 1 calc(50% - 8px);
+        text-align:center;
+      }
+      .mobile-menu-toggle {
+        display:flex;
+      }
+      .mobile-quick-actions {
+        display:flex;
+      }
+      .hero {
+        padding-top: 30px;
+      }
+      h1 {
+        font-size: clamp(36px, 12vw, 58px);
+      }
+      .mini-preview {
+        width: 82%;
+      }
+      .mini-preview-row {
+        grid-template-columns: 1fr;
+      }
+      .mini-preview-arrow {
+        display: none;
+      }
+      .demo-controls {
+        align-items: stretch;
+      }
+      .demo-controls > * {
+        flex: 1 1 100%;
+      }
+      .speech-controls {
+        align-items: stretch;
+      }
+      .speech-controls > * {
+        flex: 1 1 100%;
+      }
+      .phrase-hint {
+        margin-left: 0;
+      }
+      .result-actions {
+        justify-content: stretch;
+      }
+      .icon-button {
+        flex: 1 1 auto;
+      }
+      .panel {
+        padding: 20px;
+      }
+      .conversation-line {
+        grid-template-columns: 1fr;
+        gap: 6px;
+      }
+      .speaker {
+        font-size: 10px;
+      }
+      footer {
+        flex-direction: column;
+      }
+    }
+
+    @media (max-width: 520px) {
+      nav {
+        padding: 18px 0;
+      }
+      .brand-text {
+        font-size: 20px;
+      }
+      .navlinks {
+        gap: 8px;
+      }
+      .navlinks a {
+        flex: 1 1 calc(50% - 8px);
+        text-align: center;
+        padding: 7px 0;
+      }
+      .navcta,
+      .theme-toggle,
+      .secondary-btn,
+      .icon-button,
+      .demo-controls select,
+      .demo-controls button,
+      .speech-controls select,
+      .speech-controls button {
+        width: 100%;
+      }
+      .hero-badges {
+        gap: 8px;
+      }
+      .mini-badge {
+        width: calc(50% - 8px);
+        justify-content: center;
+      }
+      .demo-controls {
+        gap: 10px;
+      }
+      .demo-controls .phrase-hint {
+        text-align: left;
+      }
+    }
   </style>
 </head>
-<body>
+<body data-user-logged-in="{{ 'true' if user else 'false' }}">
   <div class="wrap">
     <nav>
       <div class="brand-wrap">
@@ -357,6 +692,9 @@
         {% endif %}
       </div>
       <div style="display:flex; align-items:center; gap:12px;">
+        <button class="mobile-menu-toggle" id="mobileMenuToggle" type="button" aria-label="Toggle navigation menu" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
         <button class="theme-toggle" id="themeToggle" type="button">Dark mode</button>
         <a class="navcta" href="{% if user %}/dashboard{% else %}/login{% endif %}">
           {% if user %}Open dashboard{% else %}Start translating{% endif %}
@@ -364,31 +702,96 @@
       </div>
     </nav>
 
+    <div class="mobile-quick-actions" id="mobileQuickActions">
+      <a class="navcta" href="#workspace">Start</a>
+      <a class="secondary-btn" href="{% if user %}/dashboard{% else %}/login{% endif %}">
+        {% if user %}Dashboard{% else %}Login{% endif %}
+      </a>
+    </div>
+
     <div class="hero">
       <div class="hero-copy">
         <div class="kicker">ML + NLP TRANSLATION PLATFORM</div>
         <h1>Translate anything, in context.</h1>
-        <p class="sub">A web app for text, image, document, and live conversation translation using Python with NLP-powered translation workflows.</p>
+        <p class="sub">Text. Images. Documents. Audio. Conversation. Lingua brings them together in one clean translation workspace built for modern multilingual workflows.</p>
         <div class="hero-badges">
           <span class="mini-badge">✨ AI-powered</span>
+          <span class="mini-badge">📸 OCR image input</span>
           <span class="mini-badge">📄 PDF &amp; DOCX</span>
-          <span class="mini-badge">💬 Live chat</span>
-          <span class="mini-badge">🎧 Audio ready</span>
+          <span class="mini-badge">💬 Live conversation</span>
+        </div>
+        <div class="demo-controls" style="margin-top:26px; padding-top:0; border-top:none;">
+          <a class="navcta" href="#workspace">Start translating</a>
+          <a class="secondary-btn" href="#features" style="text-decoration:none; display:inline-flex; align-items:center; justify-content:center;">See what it supports</a>
         </div>
       </div>
 
       <div class="hero-visual">
         <div class="visual-surface">
+          <div class="mini-preview">
+            <div class="mini-preview-header">
+              <span>English</span>
+              <span>French</span>
+            </div>
+            <div class="mini-preview-box">
+              <div class="mini-preview-row">
+                <div class="mini-preview-text">Where is the station?</div>
+                <div class="mini-preview-arrow">→</div>
+                <div class="mini-preview-text translated">Où est la gare ?</div>
+              </div>
+            </div>
+            <div class="mini-preview-footer">
+              <span class="translation-pill">✓ Translated</span>
+              <span>Text · Image · PDF · Audio</span>
+            </div>
+          </div>
+
           <div class="floating-card card-1"><span>✨</span> Smart translations</div>
           <div class="floating-card card-2"><span>📸</span> OCR image input</div>
           <div class="floating-card card-3"><span>📄</span> PDF &amp; DOCX</div>
           <div class="floating-card card-4"><span>💬</span> Conversation mode</div>
         </div>
       </div>
+    </div>
 
-      <div class="panel" id="text" style="grid-column: 1 / -1;">
+    <section id="features">
+      <div class="section-head">
+        <h2>What can I translate?</h2>
+        <div class="section-note">A single product experience for the formats people use most.</div>
+      </div>
+      <div class="feature-grid">
+        <div class="feature-card">
+          <h3><span class="emoji">✍️</span> Text</h3>
+          <p>Translate short phrases or full paragraphs with instant language switching and downloadable output.</p>
+        </div>
+        <div class="feature-card">
+          <h3><span class="emoji">📸</span> Image</h3>
+          <p>Extract text from uploaded images with OCR, then translate it accurately into your target language.</p>
+        </div>
+        <div class="feature-card">
+          <h3><span class="emoji">📄</span> Documents</h3>
+          <p>Translate PDFs and DOCX files while keeping structure and meaning intact across formats.</p>
+        </div>
+        <div class="feature-card">
+          <h3><span class="emoji">🎧</span> Audio</h3>
+          <p>Upload spoken content, transcribe it, and translate the transcript into a new language.</p>
+        </div>
+        <div class="feature-card">
+          <h3><span class="emoji">💬</span> Conversation</h3>
+          <p>Translate live dialogue or transcripts line by line with multilingual message support.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="workspace">
+      <div class="section-head">
+        <h2>Translation workspace</h2>
+        <div class="section-note">Start with a quick text demo, then extend into image, document, audio, and real-time conversation flows.</div>
+      </div>
+
+      <div class="panel" id="text">
         <div class="panel-label">
-          <span>LIVE DEMO — text translation</span>
+          <span>TEXT TRANSLATION</span>
           <span id="charcount">32 characters</span>
         </div>
 
@@ -413,34 +816,10 @@
             <option value="de">German</option>
             <option value="ar">Arabic</option>
           </select>
-          <button id="translateBtn">Translate</button>
-          <button id="downloadTextBtn" class="secondary-btn">Download text</button>
+          <button id="translateBtn" type="button">Translate</button>
+          <button id="downloadTextBtn" class="secondary-btn" type="button">Download text</button>
+          <button id="copyTextBtn" class="icon-button secondary" type="button">Copy result</button>
           <span class="phrase-hint" id="phraseHint">Try one of the sample phrases below, or type your own.</span>
-        </div>
-      </div>
-    </div>
-
-    <section id="features">
-      <div class="section-head">
-        <h2>Core features</h2>
-        <div class="section-note">Built for modern multilingual translation workflows.</div>
-      </div>
-      <div class="feature-grid">
-        <div class="feature-card">
-          <h3><span class="emoji">✨</span> Text translation</h3>
-          <p>Instant translation with language selection, sample phrases, and phonetic support.</p>
-        </div>
-        <div class="feature-card">
-          <h3><span class="emoji">📸</span> Image translation</h3>
-          <p>Extract text from uploaded images via OCR and translate it into your selected language.</p>
-        </div>
-        <div class="feature-card">
-          <h3><span class="emoji">📄</span> Document translation</h3>
-          <p>Upload PDFs or DOCX files and translate the content while preserving structure.</p>
-        </div>
-        <div class="feature-card">
-          <h3><span class="emoji">💬</span> Conversation translation</h3>
-          <p>Serve live bilingual transcript flows using translated line-by-line message output.</p>
         </div>
       </div>
     </section>
@@ -462,7 +841,7 @@
       </div>
 
       <div class="demo-controls">
-        <select id="imageLangSelect">
+        <select id="imageLangSelect" aria-label="Select image translation language">
           <option value="en">English</option>
           <option value="fr">French</option>
           <option value="ja">Japanese</option>
@@ -472,8 +851,11 @@
         <button id="downloadImageBtn" class="secondary-btn">Download result</button>
       </div>
 
-      <div class="result-box">
+      <div class="result-box is-empty" id="imageResultBox" aria-live="polite">
         <pre id="imageResult">Upload an image to see extracted text and translated output.</pre>
+      </div>
+      <div class="result-actions">
+        <button class="icon-button secondary" type="button" data-copy-target="imageResult">Copy result</button>
       </div>
     </section>
 
@@ -494,7 +876,7 @@
       </div>
 
       <div class="demo-controls">
-        <select id="documentLangSelect">
+        <select id="documentLangSelect" aria-label="Select document translation language">
           <option value="en">English</option>
           <option value="fr">French</option>
           <option value="ja">Japanese</option>
@@ -504,8 +886,11 @@
         <button id="downloadDocumentBtn" class="secondary-btn">Download result</button>
       </div>
 
-      <div class="result-box">
+      <div class="result-box is-empty" id="documentResultBox" aria-live="polite">
         <pre id="documentResult">Upload a document to see its translated content.</pre>
+      </div>
+      <div class="result-actions">
+        <button class="icon-button secondary" type="button" data-copy-target="documentResult">Copy result</button>
       </div>
     </section>
 
@@ -574,7 +959,7 @@
       </div>
 
       <div class="demo-controls">
-        <select id="audioLangSelect">
+        <select id="audioLangSelect" aria-label="Select audio translation language">
           <option value="fr">French</option>
           <option value="ja">Japanese</option>
           <option value="es">Spanish</option>
@@ -583,8 +968,11 @@
         <button id="audioTranslateBtn">Translate audio</button>
       </div>
 
-      <div class="result-box">
+      <div class="result-box is-empty" id="audioResultBox" aria-live="polite">
         <pre id="audioResult">Upload an audio file to see the transcript and translated result.</pre>
+      </div>
+      <div class="result-actions">
+        <button class="icon-button secondary" type="button" data-copy-target="audioResult">Copy result</button>
       </div>
     </section>
 
@@ -608,7 +996,7 @@
   <div id="toastContainer" class="toast-container" aria-live="polite"></div>
 
   <script>
-    const userLoggedIn = {{ 'true' if user else 'false' }};
+    const userLoggedIn = document.body.dataset.userLoggedIn === 'true';
 
     const phrases = {
       "where is the nearest train station?": {
@@ -642,10 +1030,25 @@
     const themeToggle = document.getElementById('themeToggle');
     const toastContainer = document.getElementById('toastContainer');
     const translateBtn = document.getElementById('translateBtn');
+    const copyTextBtn = document.getElementById('copyTextBtn');
     const imageTranslateBtn = document.getElementById('imageTranslateBtn');
     const documentTranslateBtn = document.getElementById('documentTranslateBtn');
     const conversationTranslateBtn = document.getElementById('conversationTranslateBtn');
     const audioTranslateBtn = document.getElementById('audioTranslateBtn');
+    const imageUpload = document.getElementById('imageUpload');
+    const imageLangSelect = document.getElementById('imageLangSelect');
+    const imageResult = document.getElementById('imageResult');
+    const imageResultBox = document.getElementById('imageResultBox');
+    const documentUpload = document.getElementById('documentUpload');
+    const documentLangSelect = document.getElementById('documentLangSelect');
+    const documentResult = document.getElementById('documentResult');
+    const documentResultBox = document.getElementById('documentResultBox');
+    const audioUpload = document.getElementById('audioUpload');
+    const audioLangSelect = document.getElementById('audioLangSelect');
+    const audioResult = document.getElementById('audioResult');
+    const audioResultBox = document.getElementById('audioResultBox');
+    const navlinks = document.querySelector('.navlinks');
+    const mobileMenuToggle = document.getElementById('mobileMenuToggle');
 
     function showToast(message, type = 'success') {
       if (!toastContainer) return;
@@ -678,6 +1081,84 @@
       }
     }
 
+    function updateResultBox(box, pre, message, state = 'empty') {
+      if (!box || !pre) return;
+      box.classList.remove('is-empty', 'is-error', 'is-loading');
+      if (state && state !== 'normal') {
+        box.classList.add(`is-${state}`);
+      }
+      pre.textContent = message;
+    }
+
+    function bindUploadBox(input, defaultText, defaultSubtext) {
+      if (!input) return;
+      const box = input.parentElement.querySelector('.upload-box');
+      if (!box) return;
+
+      function applyState(file) {
+        if (!file) {
+          box.classList.remove('has-file', 'is-loading', 'drag-over');
+          box.innerHTML = `
+            <div>
+              <div><strong>${defaultText}</strong></div>
+              <div>${defaultSubtext}</div>
+            </div>
+          `;
+          return;
+        }
+
+        box.classList.add('has-file');
+        box.classList.remove('is-loading', 'drag-over');
+        box.innerHTML = `
+          <div>
+            <div><strong>${file.name}</strong></div>
+            <div>${file.type || 'Selected file'}</div>
+          </div>
+        `;
+      }
+
+      input.addEventListener('change', () => applyState(input.files[0] || null));
+
+      ['dragenter', 'dragover'].forEach((eventName) => {
+        box.addEventListener(eventName, (event) => {
+          event.preventDefault();
+          box.classList.add('drag-over');
+        });
+      });
+
+      ['dragleave', 'drop'].forEach((eventName) => {
+        box.addEventListener(eventName, (event) => {
+          event.preventDefault();
+          box.classList.remove('drag-over');
+        });
+      });
+
+      box.addEventListener('drop', (event) => {
+        const file = event.dataTransfer && event.dataTransfer.files[0];
+        if (file) {
+          input.files = event.dataTransfer.files;
+          applyState(file);
+        }
+      });
+
+      applyState(null);
+    }
+
+    async function copyResult(targetId) {
+      const pre = document.getElementById(targetId);
+      if (!pre || !pre.textContent || pre.textContent.includes('Upload')) {
+        showToast('Nothing to copy yet.', 'error');
+        return;
+      }
+
+      try {
+        await navigator.clipboard.writeText(pre.textContent);
+        showToast('Copied to clipboard.');
+      } catch (error) {
+        showToast('Copy failed in this browser.', 'error');
+      }
+    }
+
     function applyTheme(theme) {
       const isDark = theme === 'dark';
       document.body.classList.toggle('dark', isDark);
@@ -689,12 +1170,24 @@
       } catch (e) {}
     }
 
+    function toggleMobileMenu(forceOpen) {
+      if (!navlinks || !mobileMenuToggle) return;
+      const shouldOpen = typeof forceOpen === 'boolean' ? forceOpen : !navlinks.classList.contains('open');
+      navlinks.classList.toggle('open', shouldOpen);
+      mobileMenuToggle.setAttribute('aria-expanded', String(shouldOpen));
+    }
+
     const preferredTheme = localStorage.getItem('lingua-theme') || 'light';
     applyTheme(preferredTheme);
 
     themeToggle?.addEventListener('click', () => {
       const nextTheme = document.body.classList.contains('dark') ? 'light' : 'dark';
       applyTheme(nextTheme);
+    });
+
+    mobileMenuToggle?.addEventListener('click', () => toggleMobileMenu());
+    navlinks?.querySelectorAll('a').forEach((link) => {
+      link.addEventListener('click', () => toggleMobileMenu(false));
     });
 
     function updateCharCount(){
@@ -739,17 +1232,19 @@
 
     input.addEventListener('input', updateCharCount);
     document.getElementById('translateBtn').addEventListener('click', doTranslate);
+    copyTextBtn?.addEventListener('click', () => copyResult('outputText'));
     langSelect.addEventListener('change', doTranslate);
     updateCharCount();
 
-    const imageUpload = document.getElementById('imageUpload');
-    const imageLangSelect = document.getElementById('imageLangSelect');
-    const imageResult = document.getElementById('imageResult');
+    bindUploadBox(imageUpload, 'Choose image', 'PNG, JPG, JPEG');
+    bindUploadBox(documentUpload, 'Choose document', 'PDF or DOCX');
+    bindUploadBox(audioUpload, 'Choose audio', 'MP3, WAV, M4A');
 
     imageTranslateBtn.addEventListener('click', async () => {
       const file = imageUpload.files[0];
       if (!file) {
-        imageResult.textContent = 'Please choose an image first.';
+        updateResultBox(imageResultBox, imageResult, 'Please choose an image first.', 'error');
+        showToast('Please choose an image first.', 'error');
         return;
       }
 
@@ -757,7 +1252,7 @@
       formData.append('file', file);
       formData.append('target_lang', imageLangSelect.value);
 
-      imageResult.textContent = 'Translating image...';
+      updateResultBox(imageResultBox, imageResult, 'Translating image...', 'loading');
       setLoading(imageTranslateBtn, true, 'Translating...');
 
       try {
@@ -766,24 +1261,21 @@
           body: formData
         });
         const data = await response.json();
-        imageResult.textContent = `OCR text:\n${data.ocr_text}\n\nTranslated text:\n${data.translated_text}`;
+        updateResultBox(imageResultBox, imageResult, `OCR text:\n${data.ocr_text}\n\nTranslated text:\n${data.translated_text}`, 'normal');
         showToast('Image translation complete! 📸');
       } catch (e) {
-        imageResult.textContent = 'Image translation failed.';
+        updateResultBox(imageResultBox, imageResult, 'Image translation failed.', 'error');
         showToast('Image translation failed. Please try again.', 'error');
       } finally {
         setLoading(imageTranslateBtn, false);
       }
     });
 
-    const documentUpload = document.getElementById('documentUpload');
-    const documentLangSelect = document.getElementById('documentLangSelect');
-    const documentResult = document.getElementById('documentResult');
-
     documentTranslateBtn.addEventListener('click', async () => {
       const file = documentUpload.files[0];
       if (!file) {
-        documentResult.textContent = 'Please choose a PDF or DOCX file first.';
+        updateResultBox(documentResultBox, documentResult, 'Please choose a PDF or DOCX file first.', 'error');
+        showToast('Please choose a PDF or DOCX file first.', 'error');
         return;
       }
 
@@ -791,7 +1283,7 @@
       formData.append('file', file);
       formData.append('target_lang', documentLangSelect.value);
 
-      documentResult.textContent = 'Translating document...';
+      updateResultBox(documentResultBox, documentResult, 'Translating document...', 'loading');
       setLoading(documentTranslateBtn, true, 'Translating...');
 
       try {
@@ -801,14 +1293,14 @@
         });
         const data = await response.json();
         if (response.ok) {
-          documentResult.textContent = `Original text:\n${data.original_text}\n\nTranslated text:\n${data.translated_text}`;
+          updateResultBox(documentResultBox, documentResult, `Original text:\n${data.original_text}\n\nTranslated text:\n${data.translated_text}`, 'normal');
           showToast('Document translated! 📄');
         } else {
-          documentResult.textContent = data.error || 'Document translation failed.';
+          updateResultBox(documentResultBox, documentResult, data.error || 'Document translation failed.', 'error');
           showToast(data.error || 'Document translation failed.', 'error');
         }
       } catch (e) {
-        documentResult.textContent = 'Document translation failed.';
+        updateResultBox(documentResultBox, documentResult, 'Document translation failed.', 'error');
         showToast('Document translation failed.', 'error');
       } finally {
         setLoading(documentTranslateBtn, false);
@@ -828,6 +1320,10 @@
     document.getElementById('downloadDocumentBtn').addEventListener('click', () => {
       if (!documentResult.textContent || documentResult.textContent.includes('Upload a document')) return;
       downloadTextFile('lingua-document-translation.txt', documentResult.textContent);
+    });
+
+    document.querySelectorAll('[data-copy-target]').forEach((button) => {
+      button.addEventListener('click', () => copyResult(button.dataset.copyTarget));
     });
 
     const conversationSamples = [
@@ -1092,14 +1588,11 @@
     historySearch?.addEventListener('input', loadHistory);
     loadHistory();
 
-    const audioUpload = document.getElementById('audioUpload');
-    const audioLangSelect = document.getElementById('audioLangSelect');
-    const audioResult = document.getElementById('audioResult');
-
     audioTranslateBtn.addEventListener('click', async () => {
       const file = audioUpload.files[0];
       if (!file) {
-        audioResult.textContent = 'Please choose an audio file first.';
+        updateResultBox(audioResultBox, audioResult, 'Please choose an audio file first.', 'error');
+        showToast('Please choose an audio file first.', 'error');
         return;
       }
 
@@ -1107,7 +1600,7 @@
       formData.append('file', file);
       formData.append('target_lang', audioLangSelect.value);
 
-      audioResult.textContent = 'Translating audio...';
+      updateResultBox(audioResultBox, audioResult, 'Translating audio...', 'loading');
       setLoading(audioTranslateBtn, true, 'Translating...');
 
       try {
@@ -1119,10 +1612,10 @@
         if (!response.ok) {
           throw new Error(data.error || 'Audio translation failed.');
         }
-        audioResult.textContent = `Transcript:\n${data.transcript}\n\nTranslated text:\n${data.translated_text}`;
+        updateResultBox(audioResultBox, audioResult, `Transcript:\n${data.transcript}\n\nTranslated text:\n${data.translated_text}`, 'normal');
         showToast('Audio translated! 🎧');
       } catch (error) {
-        audioResult.textContent = error.message || 'Audio translation failed.';
+        updateResultBox(audioResultBox, audioResult, error.message || 'Audio translation failed.', 'error');
         showToast(error.message || 'Audio translation failed.', 'error');
       } finally {
         setLoading(audioTranslateBtn, false);

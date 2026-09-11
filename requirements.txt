@@ -8,4 +8,5 @@ transformers==4.56.0
 langdetect==1.0.9
 sentencepiece==0.2.1
 gunicorn==23.0.0
-openai-whisper==20240930
+# Optional: install separately if you need the audio transcription feature
+# openai-whisper==20240930
