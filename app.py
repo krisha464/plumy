@@ -34,9 +34,17 @@ SUPPORTED_LANGS = {
     "hi": "Hindi",
     "pt": "Portuguese",
     "it": "Italian",
-    "zh": "Mandarin",
+    "zh": "Chinese",
     "pa": "Punjabi",
     "nl": "Dutch",
+    "th": "Thai",
+    "bn": "Bengali",
+    "vi": "Vietnamese",
+    "id": "Indonesian",
+    "tr": "Turkish",
+    "ur": "Urdu",
+    "ru": "Russian",
+    "uk": "Ukrainian",
 }
 
 NLLB_LANG_CODES = {
@@ -53,6 +61,14 @@ NLLB_LANG_CODES = {
     "zh": "zho_Hans",
     "pa": "pan_Guru",
     "nl": "nld_Latn",
+    "th": "tha_Thai",
+    "bn": "ben_Beng",
+    "vi": "vie_Latn",
+    "id": "ind_Latn",
+    "tr": "tur_Latn",
+    "ur": "urd_Arab",
+    "ru": "rus_Cyrl",
+    "uk": "ukr_Cyrl",
 }
 
 MY_MEMORY_LANG_NAMES = {
@@ -69,6 +85,14 @@ MY_MEMORY_LANG_NAMES = {
     "zh": "chinese traditional",
     "pa": "punjabi",
     "nl": "dutch",
+    "th": "thai",
+    "bn": "bengali",
+    "vi": "vietnamese",
+    "id": "indonesian",
+    "tr": "turkish",
+    "ur": "urdu",
+    "ru": "russian",
+    "uk": "ukrainian",
 }
 
 FALLBACK_TRANSLATIONS = {

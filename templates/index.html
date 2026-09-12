@@ -833,34 +833,85 @@
         <h2>What can I translate?</h2>
         <div class="section-note">A single product experience for the formats people use most.</div>
       </div>
-      <div class="feature-grid">
-        <div class="feature-card">
+      <div class="feature-grid reveal">
+        <div class="feature-card feature-card--text">
+          <div class="feature-tag">Fast</div>
           <h3><span class="emoji">✍️</span> Text</h3>
           <p>Translate short phrases or full paragraphs with instant language switching and downloadable output.</p>
+          <div class="feature-benefit">Perfect for classroom notes, business content, and customer support.</div>
         </div>
-        <div class="feature-card">
+        <div class="feature-card feature-card--image">
+          <div class="feature-tag">Smart</div>
           <h3><span class="emoji">📸</span> Image</h3>
           <p>Extract text from uploaded images with OCR, then translate it accurately into your target language.</p>
+          <div class="feature-benefit">Great for menus, signs, product labels, and screenshots.</div>
         </div>
-        <div class="feature-card">
+        <div class="feature-card feature-card--document">
+          <div class="feature-tag">Structured</div>
           <h3><span class="emoji">📄</span> Documents</h3>
           <p>Translate PDFs and DOCX files while keeping structure and meaning intact across formats.</p>
+          <div class="feature-benefit">Useful for reports, contracts, guides, and shared documents.</div>
         </div>
-        <div class="feature-card">
+        <div class="feature-card feature-card--audio">
+          <div class="feature-tag">Clear</div>
           <h3><span class="emoji">🎧</span> Audio</h3>
           <p>Upload spoken content, transcribe it, and translate the transcript into a new language.</p>
+          <div class="feature-benefit">Helpful for interviews, podcasts, meetings, and voice notes.</div>
         </div>
-        <div class="feature-card">
+        <div class="feature-card feature-card--conversation">
+          <div class="feature-tag">Live</div>
           <h3><span class="emoji">💬</span> Conversation</h3>
           <p>Translate live dialogue or transcripts line by line with multilingual message support, language detection, and conversation history.</p>
+          <div class="feature-benefit">Built for global chats, travel, support, and multilingual sessions.</div>
         </div>
       </div>
     </section>
 
-    <section id="workspace">
+    <section id="why-users-love-it" class="reveal">
+      <div class="section-head">
+        <h2>Why users love Lingua</h2>
+        <div class="section-note">A cleaner experience for multilingual communication, content sharing, and real-time understanding.</div>
+      </div>
+      <div class="feature-grid">
+        <div class="feature-card feature-card--text">
+          <div class="feature-tag">Flexible</div>
+          <h3><span class="emoji">🌍</span> Translate across multiple formats</h3>
+          <p>Switch between text, image, document, audio, and conversation workflows in a single dashboard.</p>
+        </div>
+        <div class="feature-card feature-card--image">
+          <div class="feature-tag">Fast</div>
+          <h3><span class="emoji">⚡</span> Built for speed and clarity</h3>
+          <p>Get quick results for demos, content drafts, daily communication, and rapid multilingual review.</p>
+        </div>
+        <div class="feature-card feature-card--document">
+          <div class="feature-tag">Practical</div>
+          <h3><span class="emoji">📦</span> Works with real-world content</h3>
+          <p>Handle PDFs, screenshots, notes, transcripts, and live speech with a consistent translation flow.</p>
+        </div>
+        <div class="feature-card feature-card--conversation">
+          <div class="feature-tag">Human</div>
+          <h3><span class="emoji">🤝</span> Designed for global communication</h3>
+          <p>Create smoother, clearer conversations for customers, learners, teams, and international audiences.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="workspace" class="reveal">
       <div class="section-head">
         <h2>Translation workspace</h2>
         <div class="section-note">Start with a quick text demo, then extend into image, document, audio, and real-time conversation flows.</div>
+      </div>
+
+      <div class="before-after-grid reveal">
+        <div class="before-after-card">
+          <div class="before-after-meta">Before</div>
+          <div class="before-after-highlight">Where is the nearest train station?</div>
+        </div>
+        <div class="before-after-arrow">→</div>
+        <div class="before-after-card before-after-card--translated">
+          <div class="before-after-meta">After</div>
+          <div class="before-after-highlight">Où se trouve la gare la plus proche ?</div>
+        </div>
       </div>
 
       <div class="panel" id="text">
@@ -889,6 +940,18 @@
             <option value="es">Spanish</option>
             <option value="de">German</option>
             <option value="ar">Arabic</option>
+            <option value="hi">Hindi</option>
+            <option value="pa">Punjabi</option>
+            <option value="ko">Korean</option>
+            <option value="zh">Chinese</option>
+            <option value="th">Thai</option>
+            <option value="bn">Bengali</option>
+            <option value="vi">Vietnamese</option>
+            <option value="id">Indonesian</option>
+            <option value="tr">Turkish</option>
+            <option value="ur">Urdu</option>
+            <option value="ru">Russian</option>
+            <option value="uk">Ukrainian</option>
           </select>
           <button id="translateBtn" type="button">Translate</button>
           <button id="downloadTextBtn" class="secondary-btn" type="button">Download text</button>
@@ -922,6 +985,18 @@
             <option value="fr">French</option>
             <option value="ja">Japanese</option>
             <option value="es">Spanish</option>
+            <option value="hi">Hindi</option>
+            <option value="pa">Punjabi</option>
+            <option value="ko">Korean</option>
+            <option value="zh">Chinese</option>
+            <option value="th">Thai</option>
+            <option value="bn">Bengali</option>
+            <option value="vi">Vietnamese</option>
+            <option value="id">Indonesian</option>
+            <option value="tr">Turkish</option>
+            <option value="ur">Urdu</option>
+            <option value="ru">Russian</option>
+            <option value="uk">Ukrainian</option>
           </select>
           <button id="imageTranslateBtn">Translate image</button>
           <button id="downloadImageBtn" class="secondary-btn">Download result</button>
@@ -960,6 +1035,18 @@
             <option value="fr">French</option>
             <option value="ja">Japanese</option>
             <option value="de">German</option>
+            <option value="hi">Hindi</option>
+            <option value="pa">Punjabi</option>
+            <option value="ko">Korean</option>
+            <option value="zh">Chinese</option>
+            <option value="th">Thai</option>
+            <option value="bn">Bengali</option>
+            <option value="vi">Vietnamese</option>
+            <option value="id">Indonesian</option>
+            <option value="tr">Turkish</option>
+            <option value="ur">Urdu</option>
+            <option value="ru">Russian</option>
+            <option value="uk">Ukrainian</option>
           </select>
           <button id="documentTranslateBtn">Translate document</button>
           <button id="downloadDocumentBtn" class="secondary-btn">Download result</button>
@@ -995,6 +1082,18 @@
               <option value="fr">French</option>
               <option value="es">Spanish</option>
               <option value="de">German</option>
+              <option value="hi">Hindi</option>
+              <option value="pa">Punjabi</option>
+              <option value="ko">Korean</option>
+              <option value="zh">Chinese</option>
+              <option value="th">Thai</option>
+              <option value="bn">Bengali</option>
+              <option value="vi">Vietnamese</option>
+              <option value="id">Indonesian</option>
+              <option value="tr">Turkish</option>
+              <option value="ur">Urdu</option>
+              <option value="ru">Russian</option>
+              <option value="uk">Ukrainian</option>
             </select>
             <button id="conversationTranslateBtn">Translate conversation</button>
           </div>
@@ -1047,6 +1146,18 @@
               <option value="es">Spanish</option>
               <option value="de">German</option>
               <option value="ar">Arabic</option>
+              <option value="hi">Hindi</option>
+              <option value="pa">Punjabi</option>
+              <option value="ko">Korean</option>
+              <option value="zh">Chinese</option>
+              <option value="th">Thai</option>
+              <option value="bn">Bengali</option>
+              <option value="vi">Vietnamese</option>
+              <option value="id">Indonesian</option>
+              <option value="tr">Turkish</option>
+              <option value="ur">Urdu</option>
+              <option value="ru">Russian</option>
+              <option value="uk">Ukrainian</option>
             </select>
             <button id="startSpeechBtn">Start live conversation</button>
             <button id="stopSpeechBtn" class="secondary-btn">Stop</button>
@@ -1109,6 +1220,18 @@
             <option value="ja">Japanese</option>
             <option value="es">Spanish</option>
             <option value="de">German</option>
+            <option value="hi">Hindi</option>
+            <option value="pa">Punjabi</option>
+            <option value="ko">Korean</option>
+            <option value="zh">Chinese</option>
+            <option value="th">Thai</option>
+            <option value="bn">Bengali</option>
+            <option value="vi">Vietnamese</option>
+            <option value="id">Indonesian</option>
+            <option value="tr">Turkish</option>
+            <option value="ur">Urdu</option>
+            <option value="ru">Russian</option>
+            <option value="uk">Ukrainian</option>
           </select>
           <button id="audioTranslateBtn">Translate audio</button>
         </div>
@@ -1122,7 +1245,7 @@
       </div>
     </details>
 
-    <section id="history">
+    <section id="history" class="reveal">
       <div class="section-head">
         <h2>Translation history</h2>
         <div class="section-note">Recent translations saved by the app for quick review.</div>
@@ -1145,7 +1268,7 @@
     const userLoggedIn = document.body.dataset.userLoggedIn === 'true';
 
     const phrases = {
-      "where is the nearest train station?": {
+      "where is the neikiarest train station?": {
         fr: {text:"Où se trouve la gare la plus proche ?", phon:"/u sə tʁuv la ɡaʁ la plys pʁɔʃ/"},
         ja: {text:"一番近い駅はどこですか？", phon:"ichiban chikai eki wa doko desu ka?"},
         es: {text:"¿Dónde está la estación de tren más cercana?", phon:""},
@@ -1171,6 +1294,7 @@
     const input = document.getElementById('inputText');
     const output = document.getElementById('outputText');
     const phon = document.getElementById('outputPhonetic');
+    const revealItems = document.querySelectorAll('.reveal');
     const langSelect = document.getElementById('langSelect');
     const charcount = document.getElementById('charcount');
     const themeToggle = document.getElementById('themeToggle');
@@ -1209,6 +1333,27 @@
         toast.classList.remove('show');
         setTimeout(() => toast.remove(), 250);
       }, 2300);
+    }
+
+    function addSuccessState(button) {
+      if (!button) return;
+      button.classList.remove('is-success');
+      void button.offsetWidth;
+      button.classList.add('is-success');
+      setTimeout(() => button.classList.remove('is-success'), 500);
+    }
+
+    function revealOnScroll() {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.15 });
+
+      revealItems.forEach((item) => observer.observe(item));
     }
 
     function setLoading(button, isLoading, label = '') {
@@ -1300,6 +1445,8 @@
       try {
         await navigator.clipboard.writeText(pre.textContent);
         showToast('Copied to clipboard.');
+        const button = document.querySelector(`[data-copy-target="${targetId}"]`);
+        addSuccessState(button);
       } catch (error) {
         showToast('Copy failed in this browser.', 'error');
       }
@@ -1339,6 +1486,8 @@
     function updateCharCount(){
       charcount.textContent = input.value.length + " characters";
     }
+
+    revealOnScroll();
 
     async function doTranslate() {
       const text = input.value.trim();
@@ -1456,16 +1605,22 @@
     document.getElementById('downloadTextBtn').addEventListener('click', () => {
       if (!output.textContent.trim()) return;
       downloadTextFile('lingua-text-translation.txt', `${input.value}\n\n--- translated ---\n${output.textContent}`);
+      addSuccessState(document.getElementById('downloadTextBtn'));
+      showToast('Download started.');
     });
 
     document.getElementById('downloadImageBtn').addEventListener('click', () => {
       if (!imageResult.textContent || imageResult.textContent.includes('Upload an image')) return;
       downloadTextFile('lingua-image-translation.txt', imageResult.textContent);
+      addSuccessState(document.getElementById('downloadImageBtn'));
+      showToast('Download started.');
     });
 
     document.getElementById('downloadDocumentBtn').addEventListener('click', () => {
       if (!documentResult.textContent || documentResult.textContent.includes('Upload a document')) return;
       downloadTextFile('lingua-document-translation.txt', documentResult.textContent);
+      addSuccessState(document.getElementById('downloadDocumentBtn'));
+      showToast('Download started.');
     });
 
     document.querySelectorAll('[data-copy-target]').forEach((button) => {
